@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.talis.hbase</groupId>
+  <artifactId>hbase-rdf</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>HBase RDF</name>
+  <description>HBase RDF</description>
+  <url>...</url>
+
+  <properties>
+    <hbase.version>0.89.0-SNAPSHOT</hbase.version>
+    <jena.version>2.6.4</jena.version>
+    <jdk.version>1.6</jdk.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase</artifactId>
+      <version>${hbase.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.hp.hpl.jena</groupId>
+      <artifactId>jena</artifactId>
+      <version>${jena.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hbase</groupId>
+      <artifactId>hbase</artifactId>
+      <version>${hbase.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.hadoop</groupId>
+      <artifactId>hadoop-test</artifactId>
+      <version>0.20.3-append-r964955-1240</version>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${jdk.version}</source>
+          <target>${jdk.version}</target>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/TS_*.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+         <buildOutputDirectory>${project.build.directory}/classes-eclipse</buildOutputDirectory>
+         <downloadSources>true</downloadSources>
+         <downloadJavadocs>false</downloadJavadocs>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <repositories>
+
+    <repository>
+      <id>apache-snapshots</id>
+      <name>Apache Snapshots</name>
+      <url>https://repository.apache.org/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+    </repository>
+
+    <repository>
+      <id>temp-hadoop</id>
+      <name>Hadoop 0.20.1/2 packaging, thrift, zk</name>
+      <url>http://people.apache.org/~rawson/repo/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+
+    <repository>
+      <id>java.net</id>
+      <name>Java.Net</name>
+      <url>http://download.java.net/maven/2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+
+    <repository>
+      <id>codehaus</id>
+      <name>Codehaus Public</name>
+      <url>http://repository.codehaus.org/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+    </repository>
+
+  </repositories>
+
+  <reporting>
+
+    <outputDirectory>${project.build.directory}/site</outputDirectory>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <configuration>
+          <outputDirectory>${project.basedir}/target/surefire-reports-html</outputDirectory>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <configuration>
+          <instrumentation>
+            <ignores>
+              <ignore>org.slf4j.*</ignore>
+            </ignores>
+          </instrumentation>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <linkXref>true</linkXref>
+          <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+          <minimumTokens>100</minimumTokens>
+          <targetJdk>${jdk.version}</targetJdk>
+          <failOnViolation>false</failOnViolation>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </reporting>
+
+</project>
+
