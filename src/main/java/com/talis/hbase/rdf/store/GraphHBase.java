@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-public class HBaseRdf {
+import org.openjena.atlas.lib.Closeable;
+import org.openjena.atlas.lib.Sync;
+
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.sparql.engine.optimizer.reorder.Reorderable;
+
+public interface GraphHBase extends Graph, Closeable, Sync, Reorderable 
+{
 
 }

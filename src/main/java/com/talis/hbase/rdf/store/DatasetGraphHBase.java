@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
 import java.util.Iterator;
 
@@ -31,6 +31,20 @@ import com.hp.hpl.jena.update.GraphStore;
 
 public class DatasetGraphHBase extends DatasetGraphCaching implements DatasetGraph, Sync, Closeable, GraphStore {
 
+	private GraphHBase effectiveDefaultGraph ;
+	
+	public DatasetGraphHBase()
+	{
+		this.effectiveDefaultGraph = getDefaultGraphHBase();
+	}
+	
+	public GraphHBase getDefaultGraphHBase()
+	{ return ( GraphHBase )getDefaultGraph(); }
+	
+	public void setEffectiveDefaultGraph( GraphHBase g ) { effectiveDefaultGraph = g ; }
+
+    public GraphHBase getEffectiveDefaultGraph()  { return effectiveDefaultGraph ; }
+    
 	@Override
 	protected void _close() {
 		// TODO Auto-generated method stub
@@ -44,10 +58,8 @@ public class DatasetGraphHBase extends DatasetGraphCaching implements DatasetGra
 	}
 
 	@Override
-	protected Graph _createDefaultGraph() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	protected Graph _createDefaultGraph() 
+	{ return new GraphHBaseBase( "test", "cloudmaster.local:60000", "hdfs://cloudmaster.local:9000/hbase" ); }
 
 	@Override
 	protected Graph _createNamedGraph(Node graphNode) {

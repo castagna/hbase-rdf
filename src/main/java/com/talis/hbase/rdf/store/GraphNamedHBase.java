@@ -14,14 +14,15 @@
 * limitations under the License.
 */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformation;
 
-public class GraphTriplesHBase extends GraphHBaseBase {
 
-	public GraphTriplesHBase(DatasetGraphHBase dataset, Node graphName) {
+public class GraphNamedHBase extends GraphHBaseBase {
+
+	public GraphNamedHBase(DatasetGraphHBase dataset, Node graphName) {
 		super(dataset, graphName);
 		// TODO Auto-generated constructor stub
 	}

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.base.table;
 
-public class HBaseRdf {
-
+public class LocationHBase 
+{
+	
 }

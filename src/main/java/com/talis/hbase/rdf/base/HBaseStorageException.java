@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.base;
 
-public class HBaseRdf {
-
+@SuppressWarnings("serial")
+public class HBaseStorageException extends RuntimeException
+{
+    public HBaseStorageException()                          { super() ; }
+    public HBaseStorageException(String msg)                { super(msg) ; }
+    public HBaseStorageException(Throwable th)              { super(th) ; }
+    public HBaseStorageException(String msg, Throwable th)  { super(msg, th) ; }
 }

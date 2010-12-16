@@ -14,7 +14,10 @@
 * limitations under the License.
 */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.sys;
+
+import com.talis.hbase.rdf.base.table.LocationHBase;
+import com.talis.hbase.rdf.store.DatasetGraphHBase;
 
 public interface DatasetGraphMakerHBase {
 

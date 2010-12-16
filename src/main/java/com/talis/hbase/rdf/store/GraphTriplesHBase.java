@@ -14,35 +14,34 @@
 * limitations under the License.
 */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-import com.hp.hpl.jena.graph.TransactionHandler;
-import com.hp.hpl.jena.graph.impl.TransactionHandlerBase;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.sparql.engine.optimizer.reorder.ReorderTransformation;
 
-public class TransactionHandlerHBase extends TransactionHandlerBase implements TransactionHandler {
+public class GraphTriplesHBase extends GraphHBaseBase {
 
-	private final GraphHBase graph ;
-	
-	public TransactionHandlerHBase (GraphHBase graph) {
-		this.graph = graph;
-	}
-	
-	@Override
-	public void abort() {
-		throw new UnsupportedOperationException("HBase RDF: 'abort' of a transaction not supported") ;
+	public GraphTriplesHBase(DatasetGraphHBase dataset, Node graphName) {
+		super(dataset, graphName);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void begin() {}
-
-	@Override
-	public void commit() {
-		graph.sync(true);
+	public void sync() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public boolean transactionsSupported() {
-		return false;
+	public void sync(boolean force) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ReorderTransformation getReorderTransform() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.sys;
 
-public class HBaseRdf {
+import com.talis.hbase.rdf.store.DatasetGraphHBase;
 
+public class SetupHBase 
+{
+	public static DatasetGraphHBase buildDataset()
+	{
+		DatasetGraphHBase dsg = new DatasetGraphHBase();
+		return dsg;
+	}
 }

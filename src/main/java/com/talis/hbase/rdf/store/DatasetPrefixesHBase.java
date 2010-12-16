@@ -14,28 +14,30 @@
 * limitations under the License.
 */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
 import java.util.Map;
 import java.util.Set;
 
 import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
 import com.hp.hpl.jena.sparql.core.DatasetPrefixStorage;
 
-public class DatasetPrefixesHBase  implements DatasetPrefixStorage {
+public class DatasetPrefixesHBase implements DatasetPrefixStorage 
+{
+	static final String unamedGraphURI = "" ;
+	
+	@Override
+	public PrefixMapping getPrefixMapping() 
+	{ return getPrefixMapping( unamedGraphURI ); }
 
 	@Override
-	public PrefixMapping getPrefixMapping() {
-		// TODO Auto-generated method stub
-		return null;
+	public PrefixMapping getPrefixMapping( String graphName ) 
+	{ 
+		//TODO: Uses default prefix mapping implementation
+		return new PrefixMappingImpl();  
 	}
-
-	@Override
-	public PrefixMapping getPrefixMapping(String graphName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public Set<String> graphNames() {
 		// TODO Auto-generated method stub
