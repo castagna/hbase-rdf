@@ -21,6 +21,8 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.MultiAction;
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.hp.hpl.jena.graph.BulkUpdateHandler;
@@ -174,9 +176,9 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase {
 			Node sub = t.getSubject(), pred = t.getPredicate(), obj = t.getObject();
 
 			//Search and add in the subjects HTable
-			BatchUpdate update = new BatchUpdate( Bytes.toBytes( sub.toString() ) );
+			MultiAction update = new MultiAction( Bytes.toBytes( sub.toString() ) );
 			String val = "";
-			RowResult rr = subjects.getRow( sub.toString() );
+			Result rr = subjects.getRow( sub.toString() );
 			if( rr == null ) { val += pred.toString() + HBaseUtils.TRIPLE_SEPARATOR + obj.toString(); }
 			else { val = Bytes.toString( rr.get( Bytes.toBytes( HBaseUtils.COL_FAMILY_NAME ) ).getValue() ) + HBaseUtils.CELL_VALUE_SEPARATOR + pred.toString() + HBaseUtils.TRIPLE_SEPARATOR + obj.toString(); }
 			update.put( HBaseUtils.COL_FAMILY_NAME, Bytes.toBytes( val ) );
@@ -220,7 +222,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase {
 			if( sm.isConcrete() )
 			{
 				//Get the row corresponding to the subject
-				RowResult rr = subjects.getRow( sm.toString() );
+				Result rr = subjects.getRow( sm.toString() );
 
 				//Create an iterator over the triples in that row
 				trIter = new HBaseRowIterator( rr, sm, pm, om );
@@ -229,7 +231,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase {
 				if( om.isConcrete() )
 				{
 					//Get the row corresponding to the object
-					RowResult rr = objects.getRow( om.toString() );
+					Result rr = objects.getRow( om.toString() );
 
 					//Create an iterator over the triples in that row
 					trIter = new HBaseRowIterator( rr, sm, pm, om );
@@ -238,7 +240,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase {
 					if( pm.isConcrete() )
 					{
 						//Get the row corresponding to the predicate
-						RowResult rr = predicates.getRow( om.toString() );
+						Result rr = predicates.getRow( om.toString() );
 
 						//Create an iterator over the triples in that row
 						trIter = new HBaseRowIterator( rr, sm, pm, om );						
