@@ -14,9 +14,11 @@ import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.MultiAction;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.io.hfile.Compression;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -78,35 +80,57 @@ public class ExampleTest {
 		assertEquals(tableName, tables[0].getNameAsString());		
 	}
 
+	@Test
 	public void testPutGet() throws Exception {
 		String tableName = "test";
-		String[] families = new String[] { "one", "two", "three" };
+		String[] families = new String[] { "family1", "family2" };
 		HBaseAdmin admin = new HBaseAdmin(configuration);
 		HTableDescriptor desc = new HTableDescriptor(tableName);
 		for (String family : families) {
-			desc.addFamily(new HColumnDescriptor(family));
+			HColumnDescriptor hColumnDescriptor = new HColumnDescriptor(family);
+			hColumnDescriptor.setCompressionType(Compression.Algorithm.GZ); // enhable compression
+			desc.addFamily(hColumnDescriptor);
 		}
+		
 		admin.createTable(desc);
 		HTable table = new HTable(configuration, tableName);
 
-		Put put = new Put(Bytes.toBytes("rowKey2"));
+		Put put = new Put(Bytes.toBytes("rowKey"));
 		put.add(Bytes.toBytes("family1"), Bytes.toBytes("qualifier1"), Bytes.toBytes("value1"));
 		put.add(Bytes.toBytes("family2"), Bytes.toBytes("qualifier2"), Bytes.toBytes("value2"));
 		table.put(put);
-		
+
 		Get get = new Get(Bytes.toBytes("rowKey"));
 		Result result = table.get(get);
-		assertEquals (Bytes.toBytes("value1"), result.getValue(Bytes.toBytes("family1"), Bytes.toBytes("qualifier1")));
-		assertEquals (Bytes.toBytes("value2"), result.getValue(Bytes.toBytes("family2"), Bytes.toBytes("qualifier2")));
+		assertEquals ("value1", new String(result.getValue(Bytes.toBytes("family1"), Bytes.toBytes("qualifier1"))));
+		assertEquals ("value2", new String(result.getValue(Bytes.toBytes("family2"), Bytes.toBytes("qualifier2"))));
 		
 		ResultScanner scanner = table.getScanner(Bytes.toBytes("family1"));
 		Iterator<Result> iter = scanner.iterator();
 		int count = 0;
 		while ( iter.hasNext() ) {
-			Result r = iter.next();
+			iter.next();
 			count++;
 		}
 		assertEquals(1, count);
+	}
+	
+	@Test
+	public void testMultiPutGet() throws Exception {
+		String tableName = "test";
+		String[] families = new String[] { "family1", "family2" };
+		HBaseAdmin admin = new HBaseAdmin(configuration);
+		HTableDescriptor desc = new HTableDescriptor(tableName);
+		for (String family : families) {
+			HColumnDescriptor hColumnDescriptor = new HColumnDescriptor(family);
+			hColumnDescriptor.setCompressionType(Compression.Algorithm.GZ); // enhable compression
+			desc.addFamily(hColumnDescriptor);
+		}
+		
+		admin.createTable(desc);
+		HTable table = new HTable(configuration, tableName);
+		
+		table.batch();
 		
 	}
 	
