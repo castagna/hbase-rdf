@@ -44,8 +44,7 @@ public abstract class GraphHBaseBase  extends GraphBase2 implements GraphHBase {
 	}
 
     @Override
-    public Capabilities getCapabilities()
-    {
+    public Capabilities getCapabilities() {
         if ( capabilities == null )
             capabilities = new Capabilities(){
                 public boolean sizeAccurate() { return true; }
@@ -54,9 +53,9 @@ public abstract class GraphHBaseBase  extends GraphBase2 implements GraphHBase {
                 public boolean deleteAllowed() { return true ; }
                 public boolean deleteAllowed( boolean every ) { return true; } 
                 public boolean canBeEmpty() { return true; }
-                public boolean iteratorRemoveAllowed() { return false; } /* ** */
+                public boolean iteratorRemoveAllowed() { return false; }
                 public boolean findContractSafe() { return true; }
-                public boolean handlesLiteralTyping() { return false; } /* ** */
+                public boolean handlesLiteralTyping() { return false; }
             } ; 
         
         return super.getCapabilities() ;
@@ -66,21 +65,19 @@ public abstract class GraphHBaseBase  extends GraphBase2 implements GraphHBase {
     public final Node getGraphNode() { return graphNode ; }
     
     //@Override
-    public final DatasetGraphHBase getDataset()                   { return dataset ; }
+    public final DatasetGraphHBase getDataset() { return dataset ; }
     
     //@Override
-    public Lock getLock()                                       { return dataset.getLock() ; }
+    public Lock getLock() { return dataset.getLock() ; }
 	
     @Override
     public BulkUpdateHandler getBulkUpdateHandler() {return bulkUpdateHandler ; }
 
     @Override
-    public QueryHandler queryHandler()
-    { return queryHandler ; }
+    public QueryHandler queryHandler() { return queryHandler ; }
     
     @Override
-    public TransactionHandler getTransactionHandler()
-    { return transactionHandler ; }
+    public TransactionHandler getTransactionHandler() { return transactionHandler ; }
     
 	@Override
 	protected PrefixMapping createPrefixMapping() {
