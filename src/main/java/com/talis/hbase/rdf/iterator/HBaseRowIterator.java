@@ -16,6 +16,7 @@
 
 package com.talis.hbase.rdf.iterator;
 
+import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.hp.hpl.jena.graph.Node;
@@ -25,10 +26,9 @@ import com.talis.hbase.rdf.util.HBaseUtils;
 
 /**
  * An iterator class over rows in a HTable.
- *
  */
-public class HBaseRowIterator extends AbstractIterator<Triple>
-{
+public class HBaseRowIterator extends AbstractIterator<Triple> {
+
 	/** The subject, predicate and object in the given TripleMatch **/
 	Node subject = null, predicate = null, object = null;
 	
@@ -48,7 +48,7 @@ public class HBaseRowIterator extends AbstractIterator<Triple>
 	 * @param pm - the predicate of the triple to be matched
 	 * @param om - the object of the triple to be matched
 	 */
-	public HBaseRowIterator( RowResult rr, Node sm, Node pm, Node om )
+	public HBaseRowIterator( Result rr, Node sm, Node pm, Node om )
 	{
 		this.subject = sm; this.predicate = pm; this.object = om;
 		this.row = Bytes.toString( rr.getRow() );

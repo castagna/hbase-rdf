@@ -16,7 +16,8 @@
 
 package com.talis.hbase.rdf.iterator;
 
-import org.apache.hadoop.hbase.io.hfile.HFile.Reader.Scanner;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
 
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
@@ -28,7 +29,7 @@ import com.hp.hpl.jena.shared.JenaException;
 public class HBaseTableIterator extends AbstractIterator <Triple> {
 
 	/** The table scanner for the subject HTable **/
-	Scanner scanner = null;
+	ResultScanner scanner = null;
 	
 	/** An iterator over rows in the scanner **/
 	HBaseRowIterator rowIterator = null;
@@ -43,7 +44,7 @@ public class HBaseTableIterator extends AbstractIterator <Triple> {
 	 * @param pm - the predicate of the triple to be matched
 	 * @param om - the object of the triple to be matched
 	 */
-	public HBaseTableIterator( Scanner tableScanner, Node sm, Node pm, Node om ) {
+	public HBaseTableIterator( ResultScanner tableScanner, Node sm, Node pm, Node om ) {
 		this.scanner = tableScanner; this.subject = sm; this.predicate = pm; this.object = om;
 	}
 	
@@ -51,7 +52,10 @@ public class HBaseTableIterator extends AbstractIterator <Triple> {
 	public boolean hasNext() {
 		try {
 			if( rowIterator == null || !rowIterator.hasNext() ) {
-				RowResult rr = scanner.next();
+				Result rr = scanner.next();
+				
+
+				
 				if( rr == null ) { rowIterator = null; return false; }				
 				rowIterator = new HBaseRowIterator( rr, subject, predicate, object );
 			}
@@ -65,7 +69,7 @@ public class HBaseTableIterator extends AbstractIterator <Triple> {
 	public Triple _next() {
 		try {
 			if( rowIterator == null || !rowIterator.hasNext() ) {
-				RowResult rr = scanner.next();
+				Result rr = scanner.next();
 				if( rr == null ) { rowIterator = null; return null; }			
 				rowIterator = new HBaseRowIterator( rr, subject, predicate, object );
 			}
@@ -74,4 +78,6 @@ public class HBaseTableIterator extends AbstractIterator <Triple> {
 			throw new JenaException( "Cannot retrieve table contents: ", e ); 
 		}
 	}
+	
+}
 
