@@ -27,7 +27,7 @@ import com.talis.hbase.rdf.util.HBaseUtils;
  * An iterator class over rows in a HTable.
  *
  */
-public class HBaseRowIterator extends AbstractIterator
+public class HBaseRowIterator extends AbstractIterator<Triple>
 {
 	/** The subject, predicate and object in the given TripleMatch **/
 	Node subject = null, predicate = null, object = null;
@@ -56,10 +56,10 @@ public class HBaseRowIterator extends AbstractIterator
 	}
 	
 	/**
-	 * @see com.talis.hbase.rdf.iterator.AbstractIterator#getNextObj()
+	 * @see com.talis.hbase.rdf.iterator.AbstractIterator#_next()
 	 */
 	@Override
-	public Object getNextObj()
+	public Triple _next()
 	{
 		Triple tr = null;
 		

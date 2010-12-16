@@ -49,10 +49,9 @@ import com.talis.hbase.rdf.util.HBaseUtils;
 
 /**
  * A graph implementation for HBase.
- *
  */
-public class GraphHBaseBase extends GraphBase2 implements GraphHBase
-{
+public class GraphHBaseBase extends GraphBase2 implements GraphHBase {
+
 	private final QueryHandlerHBase queryHandler = new QueryHandlerHBase(this);
 	private final TransactionHandler transactionHandler = new TransactionHandlerHBase(this);
 	private final BulkUpdateHandler bulkUpdateHandler = new BulkUpdateHandlerHBase(this);
@@ -70,8 +69,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	/** The prefix to use with the table names **/
 	private String prefix = null;
 
-	public GraphHBaseBase( DatasetGraphHBase dataset, Node graphName ) 
-	{
+	public GraphHBaseBase( DatasetGraphHBase dataset, Node graphName ) {
 		super();
 		this.dataset = dataset;
 		this.graphNode = graphName;
@@ -85,8 +83,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	 * @param hbaseMaster - the url for the HBase master
 	 * @param hbaseHomeLoc - the url for the HBase home location
 	 */
-	public GraphHBaseBase( String prefix, String hbaseMaster, String hbaseHomeLoc )
-	{
+	public GraphHBaseBase( String prefix, String hbaseMaster, String hbaseHomeLoc ) {
 		super();
 
 		//Null for now
@@ -113,8 +110,7 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	 * A method that creates the three HTable's for subjects, predicates and objects.
 	 * This method deletes the tables if they already exist.
 	 */
-	private void createHTables()
-	{
+	private void createHTables() {
 		try
 		{
 			//Create a HBaseAdmin object
@@ -172,10 +168,8 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	 * @see com.hp.hpl.jena.graph.GraphAdd#add( com.hp.hpl.jena.graph.Triple )
 	 */
 	@Override
-	public void add( Triple t )
-	{
-		try
-		{
+	public void add( Triple t ) {
+		try {
 			//Get the subject, predicate and object nodes corresponding to the current triple
 			Node sub = t.getSubject(), pred = t.getPredicate(), obj = t.getObject();
 
@@ -215,12 +209,10 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	protected ExtendedIterator<Triple> graphBaseFind( TripleMatch tm ) 
-	{
+	protected ExtendedIterator<Triple> graphBaseFind( TripleMatch tm )  {
 		//Create a Null iterator
 		ExtendedIterator<Triple> trIter = NullIterator.instance();
-		try
-		{
+		try {
 			//Get the matching subject, predicate and object from the triple
 			Node sm = tm.getMatchSubject(), pm = tm.getMatchPredicate(), om = tm.getMatchObject();
 			if( sm == null ) sm = Node.ANY; if( pm == null ) pm = Node.ANY; if( om == null ) om = Node.ANY;  
@@ -265,10 +257,9 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	}
 
 	@Override
-	public Capabilities getCapabilities()
-	{
+	public Capabilities getCapabilities() {
 		if ( capabilities == null )
-			capabilities = new Capabilities(){
+			capabilities = new Capabilities() {
 			public boolean sizeAccurate() { return true; }
 			public boolean addAllowed() { return true ; }
 			public boolean addAllowed( boolean every ) { return true; }
@@ -287,25 +278,22 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	public final Node getGraphNode() { return graphNode ; }
 
 	//@Override
-	public final DatasetGraphHBase getDataset()                   { return dataset ; }
+	public final DatasetGraphHBase getDataset() { return dataset ; }
 
 	//@Override
-	public Lock getLock()                                       { return dataset.getLock() ; }
+	public Lock getLock() { return dataset.getLock() ; }
 
 	@Override
 	public BulkUpdateHandler getBulkUpdateHandler() {return bulkUpdateHandler ; }
 
 	@Override
-	public QueryHandler queryHandler()
-	{ return queryHandler ; }
+	public QueryHandler queryHandler() { return queryHandler ; }
 
 	@Override
-	public TransactionHandler getTransactionHandler()
-	{ return transactionHandler ; }
+	public TransactionHandler getTransactionHandler() { return transactionHandler ; }
 
 	@Override
-	protected PrefixMapping createPrefixMapping() 
-	{ return prefixes.getPrefixMapping(); }
+	protected PrefixMapping createPrefixMapping()  { return prefixes.getPrefixMapping(); }
 
 	@Override
 	public void sync() {
@@ -325,18 +313,3 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 		return null;
 	}
 }
-/*
- * Copyright © 2010 The University of Texas at Dallas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */

@@ -24,11 +24,9 @@ import com.hp.hpl.jena.shared.JenaException;
 
 /**
  * An iterator class over the entire subject HTable.
- * @author cloud
- *
  */
-public class HBaseTableIterator extends AbstractIterator 
-{
+public class HBaseTableIterator extends AbstractIterator <Triple> {
+
 	/** The table scanner for the subject HTable **/
 	Scanner scanner = null;
 	
@@ -45,46 +43,35 @@ public class HBaseTableIterator extends AbstractIterator
 	 * @param pm - the predicate of the triple to be matched
 	 * @param om - the object of the triple to be matched
 	 */
-	public HBaseTableIterator( Scanner tableScanner, Node sm, Node pm, Node om )
-	{
+	public HBaseTableIterator( Scanner tableScanner, Node sm, Node pm, Node om ) {
 		this.scanner = tableScanner; this.subject = sm; this.predicate = pm; this.object = om;
 	}
 	
-	/**
-	 * @see com.talis.hbase.rdf.iterator.AbstractIterator#hasNext()
-	 */
 	@Override
-	public boolean hasNext()
-	{
-		try
-		{
-			if( rowIterator == null || !rowIterator.hasNext() )
-			{
+	public boolean hasNext() {
+		try {
+			if( rowIterator == null || !rowIterator.hasNext() ) {
 				RowResult rr = scanner.next();
 				if( rr == null ) { rowIterator = null; return false; }				
 				rowIterator = new HBaseRowIterator( rr, subject, predicate, object );
 			}
 			return rowIterator.hasNext();		
+		} catch( Exception e ) { 
+			throw new JenaException( "No next element found: ", e ); 
 		}
-		catch( Exception e ) { throw new JenaException( "No next element found: ", e ); }
 	}
 	
-	/**
-	 * @see com.talis.hbase.rdf.iterator.AbstractIterator#getNextObj()
-	 */
 	@Override
-	public Object getNextObj()
-	{
-		try
-		{
-			if( rowIterator == null || !rowIterator.hasNext() )
-			{
+	public Triple _next() {
+		try {
+			if( rowIterator == null || !rowIterator.hasNext() ) {
 				RowResult rr = scanner.next();
 				if( rr == null ) { rowIterator = null; return null; }			
 				rowIterator = new HBaseRowIterator( rr, subject, predicate, object );
 			}
 			return (Triple)rowIterator.next();
+		} catch( Exception e ) { 
+			throw new JenaException( "Cannot retrieve table contents: ", e ); 
 		}
-		catch( Exception e ) { throw new JenaException( "Cannot retrieve table contents: ", e ); }
 	}
-}
+
