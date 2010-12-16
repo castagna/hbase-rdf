@@ -115,23 +115,4 @@ public class ExampleTest {
 		assertEquals(1, count);
 	}
 	
-	@Test
-	public void testMultiPutGet() throws Exception {
-		String tableName = "test";
-		String[] families = new String[] { "family1", "family2" };
-		HBaseAdmin admin = new HBaseAdmin(configuration);
-		HTableDescriptor desc = new HTableDescriptor(tableName);
-		for (String family : families) {
-			HColumnDescriptor hColumnDescriptor = new HColumnDescriptor(family);
-			hColumnDescriptor.setCompressionType(Compression.Algorithm.GZ); // enhable compression
-			desc.addFamily(hColumnDescriptor);
-		}
-		
-		admin.createTable(desc);
-		HTable table = new HTable(configuration, tableName);
-		
-		table.batch();
-		
-	}
-	
 }
