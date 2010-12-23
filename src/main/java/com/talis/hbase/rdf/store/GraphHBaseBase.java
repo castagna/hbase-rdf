@@ -17,8 +17,6 @@
 package com.talis.hbase.rdf.store;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.Get;
@@ -51,7 +49,6 @@ import com.talis.hbase.rdf.graph.BulkUpdateHandlerHBase;
 import com.talis.hbase.rdf.graph.QueryHandlerHBase;
 import com.talis.hbase.rdf.graph.ReifierHBase;
 import com.talis.hbase.rdf.graph.TransactionHandlerHBase;
-import com.talis.hbase.rdf.graph.UpdateListener;
 import com.talis.hbase.rdf.iterator.HBaseSingleRowIterator;
 import com.talis.hbase.rdf.iterator.HBaseTableIterator;
 import com.talis.hbase.rdf.util.HBaseUtils;
@@ -82,11 +79,18 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	public GraphHBaseBase( DatasetGraphHBase dataset, Node graphName ) 
 	{
 		super();
+		
 		this.dataset = dataset;
 		this.graphNode = graphName;
 		this.prefixes = new DatasetPrefixesHBase();
-		this.reifier = new ReifierHBase( this );
-		this.getEventManager().register( new UpdateListener( this ) ) ;
+		this.reifier = new ReifierHBase( this, ReificationStyle.Standard );
+		this.config = dataset.getConfiguration();
+		this.prefix = graphName.getURI();
+		
+		// Use the deterministic blank node generation algorithm
+		JenaParameters.disableBNodeUIDGeneration = true;
+
+		createHTables();
 	}
 
 	/**
@@ -94,27 +98,20 @@ public class GraphHBaseBase extends GraphBase2 implements GraphHBase
 	 * @param prefix - the table prefix name
 	 * @param hbaseConfigFile - the configuration file for the HBase master
 	 */
-	public GraphHBaseBase( String prefix, String hbaseConfigFile, ReificationStyle style ) 
+	public GraphHBaseBase( DatasetGraphHBase dataset, Node graphName, ReificationStyle style ) 
 	{
 		super();
 
-		//Null for now
-		this.dataset = null;
-		this.graphNode = null;
+		this.dataset = dataset;
+		this.graphNode = graphName;
 		this.prefixes = new DatasetPrefixesHBase();
 		this.reifier = new ReifierHBase( this, style );
-		
-		//Use the deterministic blank node generation algorithm
+		this.config = dataset.getConfiguration();		
+		this.prefix = graphName.getURI();
+
+		// Use the deterministic blank node generation algorithm
 		JenaParameters.disableBNodeUIDGeneration = true;
 
-		//Initialize a HBase Configuration
-		this.config = HBaseConfiguration.create();
-		config.addResource( new Path( hbaseConfigFile ) );
-
-		//Set the table prefix
-		this.prefix = prefix;
-
-		//Create the three HTable's
 		createHTables();
 	}
 

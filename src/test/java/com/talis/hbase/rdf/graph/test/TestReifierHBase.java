@@ -1,5 +1,11 @@
 package com.talis.hbase.rdf.graph.test;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseTestingUtility;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+
 import com.hp.hpl.jena.db.impl.DBReifier;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
@@ -15,19 +21,40 @@ import com.talis.hbase.rdf.HBaseRdfFactory;
 
 public class TestReifierHBase extends GraphTestBase
 {
+
+	private final static HBaseTestingUtility TEST_UTIL = new HBaseTestingUtility();	
+	private Configuration configuration = null;
+	
 	protected static final ReificationStyle Minimal = ReificationStyle.Minimal;
 	protected static final ReificationStyle Standard = ReificationStyle.Standard;
 	protected static final ReificationStyle Convenient = ReificationStyle.Convenient;
 	protected static final Triple ALL = Triple.create( Node.createURI( "??" ), Node.createURI( "??" ), Node.createLiteral( "??" ) );
 
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		TEST_UTIL.startMiniCluster(1);
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		TEST_UTIL.shutdownMiniCluster();
+	}
+	
+	@Before
+	public void setUp() {
+		configuration = TEST_UTIL.getConfiguration();
+	}
+	
 	public TestReifierHBase( String name )
 	{ super( name ); }
 
-	public Graph getGraph()
-	{ return HBaseRdfFactory.createGraph(); }
+	public Graph getGraph() { 
+		return HBaseRdfFactory.createGraph ( configuration ) ; 
+	}
 
-	public Graph getGraph( ReificationStyle style )
-	{ return HBaseRdfFactory.createGraph( style ); }
+	public Graph getGraph( ReificationStyle style ) { 
+		return HBaseRdfFactory.createGraph ( configuration, style ) ; 
+	}
 
 	protected final Graph getGraphWith( String facts )
 	{

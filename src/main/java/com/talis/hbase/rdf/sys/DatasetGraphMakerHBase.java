@@ -16,15 +16,15 @@
 
 package com.talis.hbase.rdf.sys;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.hp.hpl.jena.shared.ReificationStyle;
-import com.talis.hbase.rdf.base.table.LocationHBase;
 import com.talis.hbase.rdf.store.DatasetGraphHBase;
 
 public interface DatasetGraphMakerHBase {
 
-    public DatasetGraphHBase createDatasetGraph() ;
-    public DatasetGraphHBase createDatasetGraph( ReificationStyle style ) ;
-    public DatasetGraphHBase createDatasetGraph( LocationHBase location ) ;
+    public DatasetGraphHBase createDatasetGraph( Configuration configuration ) ;
+    public DatasetGraphHBase createDatasetGraph( Configuration configuration, ReificationStyle style ) ;
     public void releaseDatasetGraph(DatasetGraphHBase dataset) ;
     
 }

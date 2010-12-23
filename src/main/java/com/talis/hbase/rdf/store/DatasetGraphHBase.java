@@ -18,6 +18,7 @@ package com.talis.hbase.rdf.store;
 
 import java.util.Iterator;
 
+import org.apache.hadoop.conf.Configuration;
 import org.openjena.atlas.lib.Closeable;
 import org.openjena.atlas.lib.Sync;
 
@@ -34,12 +35,17 @@ public class DatasetGraphHBase extends DatasetGraphCaching implements DatasetGra
 
 	private GraphHBase effectiveDefaultGraph ;
 	private ReificationStyle style ;
+	private Configuration configuration ;
 	
-	public DatasetGraphHBase() 
-	{ this.style = ReificationStyle.Standard; this.effectiveDefaultGraph = getDefaultGraphHBase(); }
+	public DatasetGraphHBase ( Configuration configuration ) {
+		this ( configuration, ReificationStyle.Standard ) ;
+	}
 	
-	public DatasetGraphHBase( ReificationStyle style ) 
-	{ this.style = style; this.effectiveDefaultGraph = getDefaultGraphHBase(); }
+	public DatasetGraphHBase( Configuration configuration, ReificationStyle style ) {
+		this.configuration = configuration ;
+		this.style = style; 
+		this.effectiveDefaultGraph = getDefaultGraphHBase(); 
+	}
 	
 	public GraphHBase getDefaultGraphHBase()
 	{ return ( GraphHBase )getDefaultGraph(); }
@@ -61,8 +67,9 @@ public class DatasetGraphHBase extends DatasetGraphCaching implements DatasetGra
 	}
 
 	@Override
-	protected Graph _createDefaultGraph() 
-	{ return new GraphHBaseBase( "test", "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", style ); }
+	protected Graph _createDefaultGraph() { 
+		return new GraphHBaseBase( this, Node.createURI("test"), style ); // I don't like this "test" around -- PC 
+	}
 
 	@Override
 	protected Graph _createNamedGraph(Node graphNode) {
@@ -146,6 +153,10 @@ public class DatasetGraphHBase extends DatasetGraphCaching implements DatasetGra
 	public Dataset toDataset() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Configuration getConfiguration() {
+		return this.configuration;
 	}
 
 }

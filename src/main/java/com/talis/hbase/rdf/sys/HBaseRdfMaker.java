@@ -16,16 +16,21 @@
 
 package com.talis.hbase.rdf.sys;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.shared.ReificationStyle;
 
-public class HBaseRdfMaker 
-{
-	private static DatasetGraphMakerHBase factory = new DatasetGraphSetup(); ;
+public class HBaseRdfMaker {
+
+	private static DatasetGraphMakerHBase factory = new DatasetGraphSetup();
 	
-	public static Graph _createGraph()
-    { return factory.createDatasetGraph().getDefaultGraph() ; }
+	public static Graph _createGraph( Configuration configuration ) { 
+		return factory.createDatasetGraph( configuration ).getDefaultGraph() ; 
+	}
 	
-	public static Graph _createGraph( ReificationStyle style )
-	{ return factory.createDatasetGraph( style ).getDefaultGraph() ; }
+	public static Graph _createGraph( Configuration configuration, ReificationStyle style ) { 
+		return factory.createDatasetGraph( configuration, style ).getDefaultGraph() ; 
+	}
+
 }

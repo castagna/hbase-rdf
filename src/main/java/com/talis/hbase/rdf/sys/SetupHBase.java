@@ -16,20 +16,21 @@
 
 package com.talis.hbase.rdf.sys;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.hp.hpl.jena.shared.ReificationStyle;
 import com.talis.hbase.rdf.store.DatasetGraphHBase;
 
-public class SetupHBase 
-{
-	public static DatasetGraphHBase buildDataset()
-	{
-		DatasetGraphHBase dsg = new DatasetGraphHBase();
+public class SetupHBase {
+
+	public static DatasetGraphHBase buildDataset(Configuration configuration) {
+		DatasetGraphHBase dsg = new DatasetGraphHBase(configuration);
 		return dsg;
 	}
-	
-	public static DatasetGraphHBase buildDataset( ReificationStyle style )
-	{
-		DatasetGraphHBase dsg = new DatasetGraphHBase( style );
+
+	public static DatasetGraphHBase buildDataset(Configuration configuration, ReificationStyle style) {
+		DatasetGraphHBase dsg = new DatasetGraphHBase(configuration, style);
 		return dsg;
 	}
+
 }

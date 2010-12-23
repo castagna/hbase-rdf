@@ -16,18 +16,26 @@
 
 package com.talis.hbase.rdf;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.shared.ReificationStyle;
 import com.talis.hbase.rdf.sys.HBaseRdfMaker;
 
-public class HBaseRdfFactory 
-{
-    public static Model createModel()
-    { return ModelFactory.createModelForGraph( createGraph() ); }
+public class HBaseRdfFactory {
+
+	public static Model createModel ( Configuration configuration ) { 
+    	return ModelFactory.createModelForGraph ( createGraph( configuration ) ) ; 
+    }
     
-    public static Graph createGraph() { return HBaseRdfMaker._createGraph() ; }
+    public static Graph createGraph ( Configuration configuration ) { 
+    	return HBaseRdfMaker._createGraph ( configuration ) ; 
+    }
     
-    public static Graph createGraph( ReificationStyle style ) { return HBaseRdfMaker._createGraph( style ); }
+    public static Graph createGraph ( Configuration configuration, ReificationStyle style ) { 
+    	return HBaseRdfMaker._createGraph( configuration, style ) ; 
+    }
+
 }

@@ -16,28 +16,24 @@
 
 package com.talis.hbase.rdf.sys;
 
+import org.apache.hadoop.conf.Configuration;
+
 import com.hp.hpl.jena.shared.ReificationStyle;
-import com.talis.hbase.rdf.base.table.LocationHBase;
 import com.talis.hbase.rdf.store.DatasetGraphHBase;
 
-public class DatasetGraphSetup implements DatasetGraphMakerHBase
-{
-	@Override
-	public DatasetGraphHBase createDatasetGraph() 
-	{ return SetupHBase.buildDataset(); }
+public class DatasetGraphSetup implements DatasetGraphMakerHBase {
 
-	public DatasetGraphHBase createDatasetGraph( ReificationStyle style )
-	{ return SetupHBase.buildDataset( style ); }
-	
 	@Override
-	public DatasetGraphHBase createDatasetGraph(LocationHBase location) 
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public DatasetGraphHBase createDatasetGraph(Configuration configuration) { 
+		return SetupHBase.buildDataset(configuration); 
 	}
 
 	@Override
-	public void releaseDatasetGraph(DatasetGraphHBase dataset) 
-	{ }
+	public DatasetGraphHBase createDatasetGraph( Configuration configuration, ReificationStyle style ) { 
+		return SetupHBase.buildDataset( configuration, style ); 
+	}
+	
+	@Override
+	public void releaseDatasetGraph(DatasetGraphHBase dataset) {}
 
 }

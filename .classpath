@@ -72,6 +72,7 @@
   <classpathentry kind="var" path="M2_REPO/tomcat/jasper-runtime/5.5.23/jasper-runtime-5.5.23.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12.jar" sourcepath="M2_REPO/com/sun/xml/bind/jaxb-impl/2.1.12/jaxb-impl-2.1.12-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/hp/hpl/jena/jena/2.6.4/jena-2.6.4.jar" sourcepath="M2_REPO/com/hp/hpl/jena/jena/2.6.4/jena-2.6.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/hp/hpl/jena/jena/2.6.4/jena-2.6.4-tests.jar" sourcepath="M2_REPO/com/hp/hpl/jena/jena/2.6.4/jena-2.6.4-test-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-core/1.4/jersey-core-1.4.jar" sourcepath="M2_REPO/com/sun/jersey/jersey-core/1.4/jersey-core-1.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-json/1.4/jersey-json-1.4.jar" sourcepath="M2_REPO/com/sun/jersey/jersey-json/1.4/jersey-json-1.4-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/sun/jersey/jersey-server/1.4/jersey-server-1.4.jar" sourcepath="M2_REPO/com/sun/jersey/jersey-server/1.4/jersey-server-1.4-sources.jar"/>

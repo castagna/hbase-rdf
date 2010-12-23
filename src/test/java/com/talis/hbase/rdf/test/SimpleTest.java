@@ -16,6 +16,13 @@
 //
 package com.talis.hbase.rdf.test;
 //
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseTestingUtility;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ResIterator;
@@ -23,15 +30,29 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.VCARD;
 import com.talis.hbase.rdf.HBaseRdfFactory;
 
-///**
-// * A simple test class for the HBase Jena model.
-// *
-// */
-public class SimpleTest 
-{
-	public static void main( String[] args )
-	{
-		Model model = HBaseRdfFactory.createModel();
+public class SimpleTest {
+	
+	private final static HBaseTestingUtility TEST_UTIL = new HBaseTestingUtility();	
+	private Configuration configuration = null;
+	
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		TEST_UTIL.startMiniCluster(1);
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		TEST_UTIL.shutdownMiniCluster();
+	}
+	
+	@Before
+	public void setUp() {
+		configuration = TEST_UTIL.getConfiguration();
+	}
+
+	@Test
+	public void test() {
+		Model model = HBaseRdfFactory.createModel( configuration );
 		model.add( model.createResource( "http://example.org/person#John" ), VCARD.FN, 
 				   model.asRDFNode( Node.createLiteral( "John Smith" ) ) );
 		model.add( model.createResource( "http://example.org/person#John" ), VCARD.EMAIL,
@@ -54,4 +75,5 @@ public class SimpleTest
 		ResIterator resIter = model.listSubjects();
 		while( resIter.hasNext() ) { System.out.println( resIter.next().toString() ); }
 	}
+
 }
