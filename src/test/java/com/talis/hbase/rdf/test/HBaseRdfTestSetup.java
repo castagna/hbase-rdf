@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.test;
 
-import com.hp.hpl.jena.shared.JenaException;
-
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class HBaseRdfTestSetup
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+    public static final String testDirHBaseRdf           = "testing/" ;
+
+    public static final String manifestMain         	 = testDirHBaseRdf + "manifest-hbaserdf.ttl" ;
+    
+    public static final String storeDescMainBase     	 = testDirHBaseRdf + "StoreDesc/" ;
+    
+    public static final String storeList            	 = testDirHBaseRdf + "store-list.ttl" ;
 }

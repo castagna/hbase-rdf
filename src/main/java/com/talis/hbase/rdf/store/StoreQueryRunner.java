@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.graph.Triple;
+import com.hp.hpl.jena.graph.TripleMatch;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public interface StoreQueryRunner 
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public ExtendedIterator<Triple> storeFind( TripleMatch tm, Node graphNode ) ;
 }

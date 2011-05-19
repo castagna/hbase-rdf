@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.hp.hpl.jena.graph.Node;
+import com.talis.hbase.rdf.layout.TableDescLayouts;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public interface StoreLoaderPlus extends StoreLoader 
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public void addQuad( Node g, Node s, Node p, Node o ) ;
+	public void deleteQuad( Node g, Node s, Node p, Node o ) ;
+	public void addTuple( TableDescLayouts t, Node... nodes );
+	public void deleteTuple( TableDescLayouts t, Node... nodes );
+	public void deleteAll( Node graphNode );
 }

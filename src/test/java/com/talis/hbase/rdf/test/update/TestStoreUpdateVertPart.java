@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.test.update;
 
-import com.hp.hpl.jena.shared.JenaException;
+import junit.framework.JUnit4TestAdapter;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+import com.talis.hbase.rdf.Store;
+import com.talis.hbase.rdf.test.StoreCreator;
+
+public class TestStoreUpdateVertPart extends TestStoreUpdateBase
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public static junit.framework.Test suite() 
+	{ 
+	    return new JUnit4TestAdapter( TestStoreUpdateVertPart.class ); 
+	}
+	
+	@Override
+	Store getStore() { return StoreCreator.getStoreVerticallyPartitioned() ; }
 }

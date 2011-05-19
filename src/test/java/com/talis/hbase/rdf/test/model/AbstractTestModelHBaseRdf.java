@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.test.model;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.hp.hpl.jena.rdf.model.test.AbstractTestModel;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public abstract class AbstractTestModelHBaseRdf extends AbstractTestModel
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public AbstractTestModelHBaseRdf( String x ) { super( x ) ; }
 }

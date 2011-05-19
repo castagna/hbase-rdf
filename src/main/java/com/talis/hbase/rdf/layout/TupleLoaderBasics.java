@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.layout;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.hp.hpl.jena.graph.Node;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public interface TupleLoaderBasics 
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public void createTables( Node... row ) throws Exception ;
+	
+	public void loadTuple( Node... row ) throws Exception ;
+	
+	public void unloadTuple( Node... row ) throws Exception ;
+	
+	public void commit() throws Exception ;
 }

@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.layout;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.talis.hbase.rdf.store.TableDesc;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class TableDescLayouts 
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	private TableDesc[] tables = null ;
+	
+	public TableDescLayouts( TableDesc... tables ) { this.tables = tables ; }
+	
+	public TableDesc[] getTables() { return tables ; }
 }

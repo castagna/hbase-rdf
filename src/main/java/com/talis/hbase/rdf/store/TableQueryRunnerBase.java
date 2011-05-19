@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.talis.hbase.rdf.connection.HBaseRdfConnection;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public abstract class TableQueryRunnerBase extends StoreInformationHolder implements TableQueryRunner
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	public TableQueryRunnerBase( String storeName, HBaseRdfConnection connection ) { super( storeName, connection ) ; }
 }

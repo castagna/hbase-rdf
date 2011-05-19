@@ -27,7 +27,8 @@ import com.hp.hpl.jena.util.iterator.NiceIterator;
 /**
  * An abstract class for the iterators used.
  */
-public abstract class AbstractIterator<T> extends NiceIterator<T> {
+public abstract class AbstractIterator<T> extends NiceIterator<T> 
+{
 	private T obj = null;
 	
 	@Override
@@ -36,35 +37,38 @@ public abstract class AbstractIterator<T> extends NiceIterator<T> {
 	public abstract T _next() ;
 	
 	@Override
-	public boolean hasNext() {
-		if( obj == null ) obj = _next();
-		return obj != null;
+	public boolean hasNext() 
+	{
+		if( obj == null ) obj = _next() ;
+		return obj != null ;
 	}
 
 	@Override
-	public T next() {
-		if( obj == null ) { obj = _next(); if( obj == null ) { throw new NoSuchElementException(); } }
-		T result = obj; obj = null; return result;
+	public T next() 
+	{
+		if( obj == null ) { obj = _next() ; if( obj == null ) { throw new NoSuchElementException() ; } }
+		T result = obj ; obj = null ; return result ;
 	}
 
 	@Override
-	public void remove() { throw new UnsupportedOperationException(); }
+	public void remove() { throw new UnsupportedOperationException() ; }
 
 	@Override
-	public T removeNext() { throw new UnsupportedOperationException(); }
+	public T removeNext() { throw new UnsupportedOperationException() ; }
 
 	@Override
-	public List<T> toList() {
-		List<T> list = new ArrayList<T>();
-		while( hasNext() ) { list.add( next() ); }
-		return list;
+	public List<T> toList() 
+	{
+		List<T> list = new ArrayList<T>() ;
+		while( hasNext() ) { list.add( next() ) ; }
+		return list ;
 	}
 
 	@Override
-	public Set<T> toSet() {
-		Set<T> set = new HashSet<T>();
-		while( hasNext() ) { set.add( next() ); }
-		return set;
+	public Set<T> toSet() 
+	{
+		Set<T> set = new HashSet<T>() ;
+		while( hasNext() ) { set.add( next() ) ; }
+		return set ;
 	}
-
 }

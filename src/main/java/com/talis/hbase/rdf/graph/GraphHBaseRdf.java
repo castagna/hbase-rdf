@@ -16,30 +16,13 @@
 
 package com.talis.hbase.rdf.graph;
 
+import org.openjena.atlas.lib.Closeable;
 import org.openjena.atlas.lib.Sync;
 
 import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.Triple;
-import com.hp.hpl.jena.sparql.modify.GraphStoreEvents;
-import com.hp.hpl.jena.sparql.util.graph.GraphListenerBase;
+import com.hp.hpl.jena.sparql.engine.optimizer.reorder.Reorderable;
 
-public class UpdateListener extends GraphListenerBase 
+public interface GraphHBaseRdf extends Graph, Closeable, Sync, Reorderable 
 {
-	Sync sync ;
-
-	public UpdateListener( Sync g ) { sync = g ; }
-
-	@Override
-	public void notifyEvent( Graph source, Object value ) 
-	{	
-		if ( value.equals( GraphStoreEvents.RequestStartEvent ) ) {}
-		else if ( value.equals( GraphStoreEvents.RequestFinishEvent ) ) { sync.sync( false ) ; }
-		super.notifyEvent( source, value ) ;
-	}
-
-	@Override
-	protected void addEvent( Triple t ) {}
-
-	@Override
-	protected void deleteEvent( Triple t ) {}
+	public void clear() ;
 }

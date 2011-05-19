@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.shared;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.talis.hbase.rdf.HBaseRdfException;
 
 @SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class HBaseRdfInternalError extends HBaseRdfException
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+    public HBaseRdfInternalError( String msg ) { super( msg ) ; }
+    public HBaseRdfInternalError( String msg, Throwable th ) { super( msg, th ) ; }
 }

@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.store;
 
-import com.hp.hpl.jena.shared.JenaException;
-
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public interface StoreFormatter
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+    /** Create the main tables and all indexes */
+    public void create() ;
+    
+    /** Add indexes - these are kept upto date for any future additions or deletions of data */
+    void addIndexes() ;
+
+    /** Drop indexes for triple/node tables */
+    void dropIndexes() ;
+    
+    /** Format the store - create tables but not secondary indexes */ 
+    void format() ;
+    
+    /** Truncate tables - clearing the store but leaving all indexes inplace */
+    void truncate() ;
 }

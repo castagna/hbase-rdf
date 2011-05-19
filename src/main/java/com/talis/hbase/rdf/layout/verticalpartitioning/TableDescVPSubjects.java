@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.layout.verticalpartitioning;
 
-import com.hp.hpl.jena.shared.JenaException;
-
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class TableDescVPSubjects extends TableDescVPCommon
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	protected static final String SUBJECT_TBL_NAME = "-subjects" ;
+    
+    public static String name() { return SUBJECT_TBL_NAME ; }
+
+    public TableDescVPSubjects() { this( SUBJECT_TBL_NAME ) ; }
+    
+    public TableDescVPSubjects( String tName ) { super( tName ) ; }    
 }

@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.layout.verticalpartitioning;
 
-import com.hp.hpl.jena.shared.JenaException;
+import com.talis.hbase.rdf.store.TableDesc;
 
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class TableDescVerticallyPartitioned 
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	private TableDesc[] tables = null ;
+	
+	public TableDescVerticallyPartitioned()
+	{
+		tables = new TableDesc[2] ;
+		tables[0] = new TableDescVPSubjects() ;
+		tables[1] = new TableDescVPObjects() ;
+	}
+	
+	protected TableDesc[] getTableDesc() { return tables ; }
 }

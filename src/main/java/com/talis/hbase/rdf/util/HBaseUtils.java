@@ -16,48 +16,52 @@
 
 package com.talis.hbase.rdf.util;
 
-import org.apache.hadoop.hbase.util.Bytes;
-
+import com.hp.hpl.jena.datatypes.TypeMapper;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.graph.test.NodeCreateUtils;
+import com.hp.hpl.jena.rdf.model.AnonId;
+import com.hp.hpl.jena.shared.impl.JenaParameters;
 
 /**
  * A utility class with convenience variables and methods.
- *
  */
 public class HBaseUtils 
 {
-	/** The suffix for the subject HTable **/
-	public static final String SUBJECT_TBL_NAME = "subjects";
-
-	/** The suffix for the predicate HTable **/
-	public static final String PREDICATE_TBL_NAME = "predicates";
-	
-	/** The suffix for the object HTable **/
-	public static final String OBJECT_TBL_NAME = "objects";
-	
-	/** The column family value in each HTable **/
-	public static final String COL_FAMILY_NAME_STR = "triples";
-	
-	/** The column family name as a byte array **/
-	public static final byte[] COL_FAMILY_NAME_BYTES = Bytes.toBytes( COL_FAMILY_NAME_STR );
-
-	/** The qualifier for the triples column in each HTable **/
-	public static final String COL_QUALIFIER_NAME_STR = "triples";
-
-	/** The qualifier as a byte array **/
-	public static final byte[] COL_QUALIFIER_NAME_BYTES = Bytes.toBytes( COL_QUALIFIER_NAME_STR );
-
-	/** Separator characters between triples in a cell **/
-	public static final String CELL_VALUE_SEPARATOR = "&&";
-	
-	/** Separator characters between the parts of a triple being stored **/
-	public static final String TRIPLE_SEPARATOR = "~~";
-		
 	/**
 	 * A method that converts a string representation into a Node
 	 * @param strNode - the string representation as fetched from the HTable
 	 * @return a Node representation of the given string
 	 */
-	public static Node getNode( String strNode ) { return NodeCreateUtils.create( strNode ); }
+	public static Node getNode( String strNode ) 
+	{  
+		Node node = null ;
+		if( strNode.startsWith( "\"", 0 ) )
+		{
+			String remParts = strNode.substring( strNode.lastIndexOf( "\"" ) + 1 ) ;
+			strNode = strNode.substring( 1, strNode.lastIndexOf( "\"" ) ) ;
+			if( remParts.equalsIgnoreCase( "" ) ) node = Node.createLiteral( strNode ) ;
+			else
+			{
+				String[] parts = remParts.split( "\\^\\^" ) ;
+				String lang = parts[0].replaceFirst( "@" , "" ) ;
+				String type = null ;
+				if( parts.length == 2 ) type = parts[1] ; else type = "" ;
+				node = Node.createLiteral( strNode, lang, TypeMapper.getInstance().getTypeByName( type ) ) ;
+			}
+		}
+		else if( strNode.startsWith( "_", 0 ) || ( JenaParameters.disableBNodeUIDGeneration == true && strNode.startsWith( "A" ) ) ) 
+			node = Node.createAnon( new AnonId( strNode ) ) ;
+		else node = Node.createURI( strNode ) ;
+		
+		return node ;
+	}
+	
+	public static String getNameOfNode( Node node )
+	{
+		String pred = null ;
+		if( node.isURI() ) pred = node.getLocalName() ;	 
+		else if( node.isBlank() ) pred = node.getBlankNodeLabel() ;
+		else if( node.isLiteral() ) pred = node.getLiteralValue().toString() ;
+		else pred = node.toString() ;
+		return pred ;
+	}
 }

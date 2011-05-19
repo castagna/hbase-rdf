@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.talis.hbase.rdf;
+package com.talis.hbase.rdf.layout.simple;
 
-import com.hp.hpl.jena.shared.JenaException;
-
-@SuppressWarnings("serial")
-public class HBaseRdfException extends JenaException 
+public class TableDescPredicates extends TableDescSimpleCommon
 {
-    public HBaseRdfException()                            { super() ; }
-    public HBaseRdfException( String msg )                { super( msg ) ; }
-    public HBaseRdfException( Throwable th )              { super( th ) ; }
-    public HBaseRdfException( String msg, Throwable th )  { super( msg, th ) ; }
+	protected static final String PREDICATE_TBL_NAME = "-predicates" ;
+    
+    public static String name() { return PREDICATE_TBL_NAME ; }
+
+    public TableDescPredicates() { this( PREDICATE_TBL_NAME ) ; }
+    
+    public TableDescPredicates( String tName ) { super( tName ) ; }    
 }
