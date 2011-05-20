@@ -16,6 +16,70 @@
 
 package com.talis.hbase.rdf;
 
-public class HBaseRdf {
+import com.hp.hpl.jena.assembler.assemblers.AssemblerGroup;
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
+import com.hp.hpl.jena.query.ARQ;
+import com.hp.hpl.jena.shared.PrefixMapping;
+import com.hp.hpl.jena.shared.impl.PrefixMappingImpl;
+import com.hp.hpl.jena.sparql.core.assembler.AssemblerUtils;
+import com.hp.hpl.jena.sparql.util.Context;
+import com.hp.hpl.jena.vocabulary.OWL;
+import com.hp.hpl.jena.vocabulary.RDF;
+import com.hp.hpl.jena.vocabulary.RDFS;
+import com.talis.hbase.rdf.assembler.AssemblerVocab;
 
+public class HBaseRdf 
+{
+    public final static String namespace = "http://rdf.hbase.talis.com/2011/hbase-rdf#" ;
+    
+    public static Context getContext() { return ARQ.getContext() ; }
+    
+    static { initWorker() ; }
+    public static void init() { }
+    
+    /** Used by Jena assemblers for registration */ 
+    public static void whenRequiredByAssembler( AssemblerGroup g )
+    {
+        AssemblerUtils.init() ;         // ARQ 
+        AssemblerVocab.register( g ) ;    // SDB
+    }
+    
+    private static boolean initialized = false ;
+    private static synchronized void initWorker()
+    {
+        // Called from 
+        // + StoreFactory
+        // + DatasetStore
+        // Commands call AssemblerVocab.init() ;
+
+        if ( initialized )
+            return ;
+        
+        // Set this immediately in case code below causes init() to be called.
+        // (It's better if there are no dependences but ...)
+        initialized = true ;        
+    }
+    
+    /** RDF namespace prefix */
+    private static final String rdfPrefix = RDF.getURI() ;
+
+    /** RDFS namespace prefix */
+    private static final String rdfsPrefix = RDFS.getURI() ;
+
+    /** OWL namespace prefix */
+    private static final String owlPrefix = OWL.getURI() ;
+    
+    /** XSD namespace prefix */
+    private static final String xsdPrefix = XSDDatatype.XSD + "#" ;
+    
+    protected static PrefixMapping globalPrefixMap = new PrefixMappingImpl() ;
+    static 
+    {
+        globalPrefixMap.setNsPrefix( "rdf",  rdfPrefix ) ;
+        globalPrefixMap.setNsPrefix( "rdfs", rdfsPrefix ) ;
+        globalPrefixMap.setNsPrefix( "xsd",  xsdPrefix ) ;
+        globalPrefixMap.setNsPrefix( "owl" , owlPrefix ) ;
+        globalPrefixMap.setNsPrefix( "sdb" , namespace ) ;
+    }
+    public static PrefixMapping getGlobalPrefixMapping() { return globalPrefixMap ; }
 }

@@ -48,6 +48,14 @@
 
     <dependency>
       <groupId>com.hp.hpl.jena</groupId>
+      <artifactId>arq</artifactId>
+      <version>${arq.version}</version>
+      <classifier>tests</classifier>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.hp.hpl.jena</groupId>
       <artifactId>jena</artifactId>
       <version>${jena.version}</version>
       <classifier>tests</classifier>
