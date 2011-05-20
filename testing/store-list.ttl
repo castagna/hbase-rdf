@@ -1,0 +1,14 @@
+@prefix hbaserdf:     	<http://rdf.hbase.talis.com/2011/hbase-rdf#> .
+@prefix rdf:      		<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:	  		<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix desc:     		<StoreDesc/> .
+
+_:x rdf:type hbaserdf:StoreList ;
+    hbaserdf:list
+    (
+      [ rdfs:label "Simple Layout" ;
+        hbaserdf:description <StoreDesc/simple.ttl> ]
+
+      [ rdfs:label "Vertical Partitioning Layout" ;
+        hbaserdf:description <StoreDesc/vertical-partitioning.ttl> ]
+    ) .

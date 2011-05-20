@@ -1,0 +1,20 @@
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix ja:     <http://jena.hpl.hp.com/2005/11/Assembler#> .
+@prefix hbaserdf:     <http://rdf.hbase.talis.com/2011/hbase-rdf#> .
+
+# Test assembler; 
+
+[] ja:loadClass "com.talis.hbase.rdf.HBaseRdf" .
+
+# hbaserdf:DatasetStore rdfs:subClassOf ja:RDFDataset .
+
+<#dataset> rdf:type hbaserdf:DatasetStore ;
+    hbaserdf:store <#store> .
+
+<#store> rdf:type hbaserdf:Store ;
+    hbaserdf:layout      "layout1" ;
+	hbaserdf:configuration	"/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml" ;
+    .
