@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,12 @@ public class TestConnection extends ParamAllStoreDesc
     {
     	return Arrays.asList( new Object[][]
     	{
-    		{ "simple", 	StoreDesc.read( "testing/StoreDesc/simple.ttl" ) },
-    		{ "vert-part", 	StoreDesc.read( "testing/StoreDesc/vertical-partitioning.ttl" ) }
+    		{ "simple", 		StoreDesc.read( "testing/StoreDesc/simple.ttl" ) },
+    		{ "vert-part", 		StoreDesc.read( "testing/StoreDesc/vertical-partitioning.ttl" ) },
+    		{ "indexed", 		StoreDesc.read( "testing/StoreDesc/indexed.ttl" ) },
+    		{ "vp-indexed", 	StoreDesc.read( "testing/StoreDesc/vp-indexed.ttl" ) },
+    		{ "hybrid", 		StoreDesc.read( "testing/StoreDesc/hybrid.ttl" ) },
+    		{ "hash", 			StoreDesc.read( "testing/StoreDesc/hash.ttl" ) }
     	} ) ;
     }
     

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -203,6 +203,9 @@ public class HBaseRdfFactory
     public static Model connectNamedModel( Store store, String iri, ReificationStyle style )
     { return createModelHBaseRdf( store, iri, style ) ; }
 
+    public static Model connectNamedModel( Store store, String iri )
+    { return createModelHBaseRdf( store, iri, ReificationStyle.Standard ) ; }
+    
     /**
      * Connect to the named model in a store
      * @param configFile

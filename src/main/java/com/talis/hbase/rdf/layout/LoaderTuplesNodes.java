@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ import com.talis.hbase.rdf.store.TupleLoader;
 
 public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLoaderPlus
 {
-	private static Logger log = LoggerFactory.getLogger( LoaderTuplesNodes.class ) ;
+	private static Logger LOG = LoggerFactory.getLogger( LoaderTuplesNodes.class ) ;
 	private boolean initialized = false ;
-	boolean threading = true ; // Do we want to thread?
+	boolean threading = false ; // Do we want to thread?
 	Thread commitThread = null ; // The loader thread
 	final static TupleChange flushSignal = new TupleChange() ; // Signal to thread to commit
 	final static TupleChange finishSignal = new TupleChange() ; // Signal to thread to finish
@@ -52,7 +52,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 	TupleLoader currentLoader ;
 
 	int count ;
-	int chunkSize = 20000 ;
+	int chunkSize = 100000 ;
 	
  	private Class<? extends TupleLoader> tupleLoaderClass ;
 
@@ -90,7 +90,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 		 }
 		 catch ( Exception e ) 
 		 {
-			 log.error( "Problem closing loader: " + e.getMessage() ) ; 
+			 LOG.error( "Problem closing loader: " + e.getMessage() ) ; 
 			 throw new HBaseRdfException( "Problem closing loader", e ) ;
 		 }
 		 finally
@@ -149,7 +149,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 			 try { queue.put( tuple ) ; }
 			 catch ( InterruptedException e )
 			 {
-				 log.error( "Issue adding to queue: " + e.getMessage() ) ;
+				 LOG.error( "Issue adding to queue: " + e.getMessage() ) ;
 				 throw new HBaseRdfException( "Issue adding to queue" + e.getMessage(), e ) ;
 			 }
 		 }
@@ -176,7 +176,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 			 }
 			 catch ( InterruptedException e )
 			 {
-				 log.error( "Problem sending flush signal: " + e.getMessage() ) ;
+				 LOG.error( "Problem sending flush signal: " + e.getMessage() ) ;
 				 throw new HBaseRdfException( "Problem sending flush signal", e) ;
 			 }
 			 checkThreadStatus() ;
@@ -202,7 +202,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 			 commitThread = new Thread( new Commiter() ) ;
 			 commitThread.setDaemon( true ) ;
 			 commitThread.start() ;
-			 log.debug( "Threading started" ) ;
+			 LOG.debug( "Threading started" ) ;
 		 }
 		 initialized = true ;
 	 }
@@ -224,6 +224,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 	 // Queue up a triple, committing if we have enough chunks
 	 private void updateOneTuple( TupleChange tuple )
 	 {
+		 if( totalTriples % 1000000 == 0 ) LOG.info( "Triples added:: " + totalTriples ) ;
 		 if( currentLoader == null || !Arrays.equals( currentLoader.getTableDesc().getTables(), tuple.table.getTables() ) ) 
 		 {
 			 commitTuples() ; // mode is changing, so commit
@@ -264,7 +265,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 	 {
 		 public void run()
 		 {
-			 log.debug( "Running loader thread" ) ;
+			 LOG.debug( "Running loader thread" ) ;
 			 threadException.set( null ) ;
 			 while( true )
 			 {
@@ -293,7 +294,7 @@ public class LoaderTuplesNodes extends StoreInformationHolder implements StoreLo
 
 		 private void handleIssue( Throwable e ) 
 		 {
-			 log.error( "Error in thread: " + e.getMessage(), e ) ;
+			 LOG.error( "Error in thread: " + e.getMessage(), e ) ;
 			 threadException.set( e ) ;
 		 }
 	 }

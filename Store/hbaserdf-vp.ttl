@@ -11,5 +11,5 @@
     .
 
 <#conn> rdf:type hbaserdf:HBaseConnection ;
-    hbaserdf:configuration	"/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml" ;
+    hbaserdf:configuration	"/Cloud/Hbase/hbase-0.90.1/conf/hbase-site.xml" ;
     .

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,10 @@ public class LayoutType extends Symbol implements Named
 {
     public static final LayoutType LayoutSimple	 	= new LayoutType( "layout1" ) ;
     public static final LayoutType LayoutVertPart	= new LayoutType( "layout2" ) ;
+    public static final LayoutType LayoutIndexed	= new LayoutType( "layout3" ) ;
+    public static final LayoutType LayoutVPIndexed  = new LayoutType( "layout4" ) ;
+    public static final LayoutType LayoutHybrid     = new LayoutType( "layout5" ) ;
+    public static final LayoutType LayoutHash       = new LayoutType( "layout6" ) ;
 
     static SymbolRegistry<LayoutType> registry = new SymbolRegistry<LayoutType>() ;
     static { init() ; }
@@ -49,6 +53,10 @@ public class LayoutType extends Symbol implements Named
     {
         register( LayoutSimple ) ;
         register( LayoutVertPart ) ;
+        register( LayoutIndexed ) ;
+        register( LayoutVPIndexed ) ;
+        register( LayoutHybrid ) ;
+        register( LayoutHash ) ;
     }
     
     static public List<String> allNames() { return registry.allNames() ; }

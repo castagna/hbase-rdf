@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.graph.Node;
 import com.talis.hbase.rdf.HBaseRdfException;
 import com.talis.hbase.rdf.connection.HBaseRdfConnection;
 
 public abstract class TupleLoaderBase extends com.talis.hbase.rdf.store.TupleLoaderBase implements TupleLoaderBasics
 {
+    private static final Logger LOG = Logger.getLogger( TupleLoaderBase.class );
     protected int chunkSize ;
     protected boolean amLoading ; // flag for whether we're loading or deleting
     protected int tupleNum ;
@@ -40,12 +43,12 @@ public abstract class TupleLoaderBase extends com.talis.hbase.rdf.store.TupleLoa
 
 	public void load( Node... row ) 
 	{
+		if ( !amLoading ) { flush() ; amLoading = true ; }
+
 		if( row.length < 3 || row.length > 4 ) throw new IllegalArgumentException( "Tuple size mismatch" );
 
 		try { createTables( row ) ; }
 		catch( Exception e ) { throw new HBaseRdfException( "Problem creating tables", e ) ; }
-		
-		if ( !amLoading ) { flush() ; amLoading = true ; }
 				
 		try { loadTuple( row ) ; }
 		catch( Exception e ) { throw new HBaseRdfException( "Problem adding triples", e ) ; }
@@ -95,7 +98,12 @@ public abstract class TupleLoaderBase extends com.talis.hbase.rdf.store.TupleLoa
 	public void finish() { super.finish() ; flush() ; }
 	
 	@Override
-	public void close() { super.close(); }
+	public void close() 
+	{ 
+		super.close(); 
+		try { commit() ; } 
+		catch( Exception e ) { throw new HBaseRdfException( "Exception flushing in close()", e ) ; } 
+	}
 	
 	/**
 	 * Flushes all commits over all HTables. Note that delete in our case is similar to add in the sense that both involve a Put operation
@@ -104,8 +112,16 @@ public abstract class TupleLoaderBase extends com.talis.hbase.rdf.store.TupleLoa
 	protected void flush() 
 	{
 		if( tupleNum == 0 ) return ;		
-		try { commit() ; } 
+		try 
+		{
+			if( tupleNum % 100000 == 0 ) LOG.info( "Store flush::Checking triples added::" + tupleNum ) ;
+			if( amLoading && tupleNum >= chunkSize )
+			{
+				LOG.info( "Store flush::Reached chunk limit" ) ;
+				commit() ;
+			}
+		} 
 		catch( Exception e ) { throw new HBaseRdfException( "Exception flushing", e ) ; } 
-		finally { tupleNum = 0 ; }
+		finally { if( tupleNum >= chunkSize ) tupleNum = 0 ; }
 	}
 }

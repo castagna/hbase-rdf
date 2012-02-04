@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,10 @@ public class TestHBaseRdfGraph
 		
 		ts.addTestSuite( TestHBaseRdfSimpleGraph.class ) ;
 		ts.addTestSuite( TestHBaseRdfVertPartGraph.class ) ;
+		ts.addTestSuite( TestHBaseRdfIndexedGraph.class ) ;
+		ts.addTestSuite( TestHBaseRdfVPIndexedGraph.class ) ;
+		ts.addTestSuite( TestHBaseRdfHybridGraph.class ) ;
+		ts.addTestSuite( TestHBaseRdfHashGraph.class ) ;
 		
 		return ts ;
 	}
@@ -57,6 +61,54 @@ public class TestHBaseRdfGraph
 		public Graph getGraph()
 		{
 			Store store = StoreCreator.getStoreVerticallyPartitioned() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+	}
+	
+	public static class TestHBaseRdfIndexedGraph extends AbstractTestGraphHBaseRdf
+	{
+		public TestHBaseRdfIndexedGraph( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+	}
+
+	public static class TestHBaseRdfVPIndexedGraph extends AbstractTestGraphHBaseRdf
+	{
+		public TestHBaseRdfVPIndexedGraph( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreVPIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+	}
+
+	public static class TestHBaseRdfHybridGraph extends AbstractTestGraphHBaseRdf
+	{
+		public TestHBaseRdfHybridGraph( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreHybrid() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+	}
+
+	public static class TestHBaseRdfHashGraph extends AbstractTestGraphHBaseRdf
+	{
+		public TestHBaseRdfHashGraph( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreHash() ;
 			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
 		}
 	}

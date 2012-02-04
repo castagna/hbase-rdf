@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,16 @@ public class HBaseRdfUpdateTestSuite extends TestSuite
         
         addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateSimple.class ) ;
         addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateVertPart.class ) ;
+        addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateIndexed.class ) ;
+        addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateVPIndexed.class ) ;
+        addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateHybrid.class ) ;
+        addTestSuite( TestSPARQLUpdate.TestSPARQLUpdateHash.class ) ;
+        
         addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtSimple.class ) ;
         addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtVertPart.class ) ;
+        addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtIndexed.class ) ;
+        addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtVPIndexed.class ) ;
+        addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtHybrid.class ) ;
+        addTestSuite( TestSPARQLUpdateMgt.TestSPARQLUpdateMgtHash.class ) ;
     }
 }

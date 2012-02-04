@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,8 @@ public abstract class StoreBase extends StoreInformationHolder implements Store
 		this.config = new StoreConfig( desc.getStoreName(), connection ) ;
 	}
 
+	public long 				getTotalSize()							{ return totalSize() ; }
+	
 	public HBaseRdfConnection  	getConnection()     					{ return connection() ; }
 
 	public StoreConfig			getConfig()								{ return config ; }
@@ -65,13 +67,13 @@ public abstract class StoreBase extends StoreInformationHolder implements Store
 	
 	public String 				getStoreName()							{ return storeDescription.getStoreName() ; }
 
-	public TableDescLayouts getTablesDesc() 							{ return tables ; }
+	public TableDescLayouts 	getTablesDesc() 						{ return tables ; }
 	
-	public void close() 												{ getLoader().close(); isClosed = true; }
+	public void 				close() 								{ getLoader().close(); isClosed = true; }
 	
-	public boolean isClosed() 											{ return isClosed; }
+	public boolean 				isClosed() 								{ return isClosed; }
 	
-    public long getSize() 												{ return getSize( Quad.defaultGraphNodeGenerated ) ; }
+    public long 				getSize() 								{ return getSize( Quad.defaultGraphNodeGenerated ) ; }
     
 	public long getSize( Node node )
 	{

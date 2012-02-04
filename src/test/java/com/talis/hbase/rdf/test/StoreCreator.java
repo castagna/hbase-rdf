@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,22 @@ import com.talis.hbase.rdf.HBaseRdfFactory;
 import com.talis.hbase.rdf.Store;
 import com.talis.hbase.rdf.StoreDesc;
 import com.talis.hbase.rdf.connection.HBaseRdfConnection;
+import com.talis.hbase.rdf.layout.hash.StoreHash;
+import com.talis.hbase.rdf.layout.hybrid.StoreHybrid;
+import com.talis.hbase.rdf.layout.indexed.StoreIndexed;
 import com.talis.hbase.rdf.layout.simple.StoreSimple;
-import com.talis.hbase.rdf.layout.verticalpartitioning.StoreVerticallyPartitioned;
+import com.talis.hbase.rdf.layout.verticalpartitioning.StoreVP;
+import com.talis.hbase.rdf.layout.vpindexed.StoreVPIndexed;
 import com.talis.hbase.rdf.store.LayoutType;
 
 public class StoreCreator 
 {
 	private static StoreSimple ss ;
-	private static StoreVerticallyPartitioned svp ;
+	private static StoreVP svp ;
+	private static StoreIndexed sin ;
+	private static StoreVPIndexed svpin ;
+	private static StoreHybrid shy ;
+	private static StoreHash sha ;
 	
 	public static Store getStoreSimple()
 	{
@@ -49,11 +57,68 @@ public class StoreCreator
 		{
 			HBaseRdfConnection conn = HBaseRdfFactory.createConnection( "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", false ) ;
 			StoreDesc desc = new StoreDesc( LayoutType.LayoutVertPart, "vps" ) ;
-			svp = new StoreVerticallyPartitioned( conn, desc ) ;
+			svp = new StoreVP( conn, desc ) ;
 			svp.getTableFormatter().format() ;
 		}
 		else 
 			svp.getTableFormatter().truncate() ;
 		return svp ;
 	}	
+	
+	public static Store getStoreIndexed()
+	{
+		if( sin == null )
+		{
+			HBaseRdfConnection conn = HBaseRdfFactory.createConnection( "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", false ) ;
+			StoreDesc desc = new StoreDesc( LayoutType.LayoutIndexed, "in" ) ;
+			sin = new StoreIndexed( conn, desc ) ;
+			sin.getTableFormatter().format() ;
+		}
+		else 
+			sin.getTableFormatter().truncate() ;
+		return sin ;
+	}
+
+	public static Store getStoreVPIndexed()
+	{
+		if( svpin == null )
+		{
+			HBaseRdfConnection conn = HBaseRdfFactory.createConnection( "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", false ) ;
+			StoreDesc desc = new StoreDesc( LayoutType.LayoutVPIndexed, "vpin" ) ;
+			svpin = new StoreVPIndexed( conn, desc ) ;
+			svpin.getTableFormatter().format() ;
+		}
+		else 
+			svpin.getTableFormatter().truncate() ;
+		return svpin ;
+	}
+
+	public static Store getStoreHybrid()
+	{
+		if( shy == null )
+		{
+			HBaseRdfConnection conn = HBaseRdfFactory.createConnection( "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", false ) ;
+			StoreDesc desc = new StoreDesc( LayoutType.LayoutHybrid, "hy" ) ;
+			shy = new StoreHybrid( conn, desc ) ;
+			shy.getTableFormatter().format() ;
+		}
+		else 
+			shy.getTableFormatter().truncate() ;
+		return shy ;
+	}
+
+	public static Store getStoreHash()
+	{
+		if( sha == null )
+		{
+			HBaseRdfConnection conn = HBaseRdfFactory.createConnection( "/Cloud/Hbase/hbase-0.89.20100924/conf/hbase-site.xml", false ) ;
+			StoreDesc desc = new StoreDesc( LayoutType.LayoutSimple, "ha" ) ;
+			sha = new StoreHash( conn, desc ) ;
+			sha.getTableFormatter().format() ;
+		}
+		else 
+			sha.getTableFormatter().truncate() ;
+		return sha ;
+	}
+
 }

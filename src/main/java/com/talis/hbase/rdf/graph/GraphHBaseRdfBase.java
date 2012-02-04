@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,7 +112,7 @@ public class GraphHBaseRdfBase extends GraphBase2 implements GraphHBaseRdf
 		if( getReifier().getStyle().conceals() && getReifier().getStyle().intercepts() ) return ;
 
     	if ( inBulkUpdate == 0 ) store.getLoader().startBulkUpdate() ;
-        
+    	
         if ( Quad.isQuadDefaultGraphGenerated( graphNode ) )
             store.getLoader().addTriple(triple) ;
         else
@@ -138,6 +138,9 @@ public class GraphHBaseRdfBase extends GraphBase2 implements GraphHBaseRdf
         }
         if (inBulkUpdate == 0) store.getLoader().finishBulkUpdate();
 	}
+	
+	@Override
+	public void close() { store.close() ; }
 	
     public void startBulkUpdate()  { inBulkUpdate += 1 ; if (inBulkUpdate == 1) store.getLoader().startBulkUpdate() ; }
     public void finishBulkUpdate() { inBulkUpdate -= 1 ; if (inBulkUpdate == 0) store.getLoader().finishBulkUpdate( ) ; }

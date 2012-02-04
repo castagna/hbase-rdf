@@ -11,4 +11,16 @@ _:x rdf:type hbaserdf:StoreList ;
 
       [ rdfs:label "Vertical Partitioning Layout" ;
         hbaserdf:description <StoreDesc/vertical-partitioning.ttl> ]
+
+      [ rdfs:label "Indexed Layout" ;
+        hbaserdf:description <StoreDesc/indexed.ttl> ]
+
+      [ rdfs:label "Vertical Partitioning with Indexing Layout" ;
+        hbaserdf:description <StoreDesc/vp-indexed.ttl> ]
+
+      [ rdfs:label "Hybrid Layout" ;
+        hbaserdf:description <StoreDesc/hybrid.ttl> ]
+        
+      [ rdfs:label "Hash Layout" ;
+        hbaserdf:description <StoreDesc/hash.ttl> ]
     ) .

@@ -1,5 +1,5 @@
 /*
-* Copyright © 2010 Talis Systems Ltd.
+* Copyright © 2010, 2011, 2012 Talis Systems Ltd.
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -33,8 +33,12 @@ import com.talis.hbase.rdf.StoreDesc;
 import com.talis.hbase.rdf.connection.HBaseRdfConnection;
 import com.talis.hbase.rdf.connection.HBaseRdfConnectionDesc;
 import com.talis.hbase.rdf.connection.HBaseRdfConnectionFactory;
+import com.talis.hbase.rdf.layout.hash.StoreHash;
+import com.talis.hbase.rdf.layout.hybrid.StoreHybrid;
+import com.talis.hbase.rdf.layout.indexed.StoreIndexed;
 import com.talis.hbase.rdf.layout.simple.StoreSimple;
-import com.talis.hbase.rdf.layout.verticalpartitioning.StoreVerticallyPartitioned;
+import com.talis.hbase.rdf.layout.verticalpartitioning.StoreVP;
+import com.talis.hbase.rdf.layout.vpindexed.StoreVPIndexed;
 
 public class StoreFactory 
 {
@@ -110,7 +114,27 @@ public class StoreFactory
         register( LayoutVertPart, 
         			new StoreMaker() {
         			public Store create( HBaseRdfConnection conn, StoreDesc desc )
-        			{ return new StoreVerticallyPartitioned( conn, desc ) ; } } ) ;
+        			{ return new StoreVP( conn, desc ) ; } } ) ;
+        
+        register( LayoutIndexed, 
+        			new StoreMaker() {
+        			public Store create( HBaseRdfConnection conn, StoreDesc desc )
+        			{ return new StoreIndexed( conn, desc ) ; } } ) ;
+        
+        register( LayoutVPIndexed,
+        			new StoreMaker() {
+        			public Store create( HBaseRdfConnection conn, StoreDesc desc )
+        			{ return new StoreVPIndexed( conn, desc ) ; } } ) ;
+        
+        register( LayoutHybrid, 
+        			new StoreMaker() {
+        			public Store create( HBaseRdfConnection conn, StoreDesc desc )
+        			{ return new StoreHybrid( conn, desc ) ; } } ) ;
+        
+        register( LayoutHash, 
+    				new StoreMaker() {
+    				public Store create( HBaseRdfConnection conn, StoreDesc desc )
+    			{ 	return new StoreHash( conn, desc ) ; } } ) ;
     }
     
     static private void checkRegistry()

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,10 @@ public class HBaseRdfModelGraphTestSuite extends TestSuite
 {
 	static boolean includeSimple = true ;
 	static boolean includeVertPart = true ;
+	static boolean includeIndexed = true ;
+	static boolean includeVPIndexed = true ;
+	static boolean includeHybrid = true ;
+	static boolean includeHash = true ;
 	
     public static junit.framework.Test suite() 
     {
@@ -47,6 +51,34 @@ public class HBaseRdfModelGraphTestSuite extends TestSuite
     		ts.addTestSuite( TestHBaseRdfModel.TestHBaseRdfVertPartModel.class ) ;
     		ts.addTestSuite( TestHBaseRdfGraph.TestHBaseRdfVertPartGraph.class ) ;
     		ts.addTestSuite( TestHBaseRdfReifier.TestHBaseRdfVertPartReifier.class ) ;
+    	}
+
+    	if( includeIndexed )
+    	{
+	       	ts.addTestSuite( TestHBaseRdfModel.TestHBaseRdfIndexedModel.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfGraph.TestHBaseRdfIndexedGraph.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfReifier.TestHBaseRdfIndexedReifier.class ) ;
+    	}
+
+    	if( includeVPIndexed )
+    	{
+	       	ts.addTestSuite( TestHBaseRdfModel.TestHBaseRdfVPIndexedModel.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfGraph.TestHBaseRdfVPIndexedGraph.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfReifier.TestHBaseRdfVPIndexedReifier.class ) ;
+    	}
+    	
+    	if( includeHybrid )
+    	{
+	       	ts.addTestSuite( TestHBaseRdfModel.TestHBaseRdfHybridModel.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfGraph.TestHBaseRdfHybridGraph.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfReifier.TestHBaseRdfHybridReifier.class ) ;
+    	}
+
+    	if( includeHash )
+    	{
+	       	ts.addTestSuite( TestHBaseRdfModel.TestHBaseRdfHashModel.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfGraph.TestHBaseRdfHashGraph.class ) ;
+	       	ts.addTestSuite( TestHBaseRdfReifier.TestHBaseRdfHashReifier.class ) ;
     	}
     	
         return ts ;

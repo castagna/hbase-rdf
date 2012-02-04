@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,19 +81,20 @@ public class HBaseRdfSingleRowIterator extends AbstractIterator<Triple>
 				if( ( predicate.equals( Node.ANY ) || ( ( predicate != Node.ANY ) && predicate.equals( trPredicate ) ) ) && ( object.equals( Node.ANY ) || ( ( object != Node.ANY ) && object.equals( trObject ) ) ) )
 					tr = Triple.create( trSubject, trPredicate, trObject ) ;
 			}
-			else
+			else 
 				if( object.isConcrete() )
 				{
 					trSubject = HBaseUtils.getNode( remTripleParts[0] ) ; trPredicate = HBaseUtils.getNode( remTripleParts[1] ) ; trObject = HBaseUtils.getNode( row ) ;
 					if( ( subject.equals( Node.ANY ) || ( ( subject != Node.ANY ) && subject.equals( trSubject ) ) ) && ( predicate.equals( Node.ANY ) || ( ( predicate != Node.ANY ) && predicate.equals( trPredicate ) ) ) )
 						tr = Triple.create( trSubject, trPredicate, trObject ) ;
 				}
-				else if( predicate.isConcrete() )
-				{
-					trSubject = HBaseUtils.getNode( remTripleParts[0] ) ; trPredicate = HBaseUtils.getNode( row ) ; trObject = HBaseUtils.getNode( remTripleParts[1] ) ; 
-					if( ( subject.equals( Node.ANY ) || ( ( subject != Node.ANY ) && subject.equals( trSubject ) ) ) && ( object.equals( Node.ANY ) || ( ( object != Node.ANY ) && object.equals( trObject ) ) ) )
-						tr = Triple.create( trSubject, trPredicate, trObject ) ;		
-				}
+				else
+					if( predicate.isConcrete() )
+					{
+						trSubject = HBaseUtils.getNode( remTripleParts[0] ) ; trPredicate = HBaseUtils.getNode( row ) ; trObject = HBaseUtils.getNode( remTripleParts[1] ) ; 
+						if( ( subject.equals( Node.ANY ) || ( ( subject != Node.ANY ) && subject.equals( trSubject ) ) ) && ( object.equals( Node.ANY ) || ( ( object != Node.ANY ) && object.equals( trObject ) ) ) )
+							tr = Triple.create( trSubject, trPredicate, trObject ) ;		
+					}
 			
 			//Clear memory
 			currTriple = null ; remTripleParts = null ;

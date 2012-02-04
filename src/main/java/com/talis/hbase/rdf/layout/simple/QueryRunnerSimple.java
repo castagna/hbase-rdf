@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,13 @@ public class QueryRunnerSimple extends TableQueryRunnerBase implements TableQuer
 		ExtendedIterator<Triple> trIter = NullIterator.instance() ; 
 		try
 		{
+			StringBuilder sb = new StringBuilder( name() ) ; sb.append( "-" ) ; sb.append( tblPrefix ) ;
 			if( tblType.equalsIgnoreCase( "sub" ) )
 			{
 				//Get the row corresponding to the subject
 				Get res = new Get( Bytes.toBytes( sm.toString() ) ) ;
-				HTable table = tables().get( name() + "-" + tblPrefix + "-subjects" ) ;
+				sb.append( TableDescSubjects.SUBJECT_TBL_NAME ) ;
+				HTable table = tables().get( sb.toString() ) ;
 				Result rr = null ; if( table != null ) rr = table.get( res ) ;
 				res = null ;
 	
@@ -57,7 +59,8 @@ public class QueryRunnerSimple extends TableQueryRunnerBase implements TableQuer
 				{
 					//Get the row corresponding to the object
 					Get res = new Get( Bytes.toBytes( om.toString() ) ) ;
-					HTable table = tables().get( name() + "-" + tblPrefix + "-objects" ) ;
+					sb.append( TableDescObjects.OBJECT_TBL_NAME ) ;
+					HTable table = tables().get( sb.toString() ) ;
 					Result rr = null ; if( table != null ) rr = table.get( res ) ;
 					res = null ;
 
@@ -69,7 +72,8 @@ public class QueryRunnerSimple extends TableQueryRunnerBase implements TableQuer
 					{
 						//Get the row corresponding to the predicate
 						Get res = new Get( Bytes.toBytes( pm.toString() ) ) ;
-						HTable table = tables().get( name() + "-" + tblPrefix + "-predicates" ) ;
+						sb.append( TableDescPredicates.PREDICATE_TBL_NAME ) ;
+						HTable table = tables().get( sb.toString() ) ;
 						Result rr = null ; if( table != null ) rr = table.get( res ) ;
 						res = null ;
 						
@@ -82,9 +86,11 @@ public class QueryRunnerSimple extends TableQueryRunnerBase implements TableQuer
 						{
 							//Create an iterator over all rows in the subject's HTable
 							Scan scanner = new Scan() ;
-							HTable table = tables().get( name() + "-" + tblPrefix + "-subjects" ) ;
+							sb.append( TableDescSubjects.SUBJECT_TBL_NAME ) ;
+							HTable table = tables().get( sb.toString() ) ;
 							if( table != null ) trIter = new HBaseRdfSingleTableIterator( table.getScanner( scanner ), sm, pm, om, TableDescSimpleCommon.COL_FAMILY_NAME_STR ) ;
 						}
+			sb = null ;
 		}
 		catch( Exception e ) { throw new HBaseRdfException( "Error in querying tables", e ) ; }
 		return trIter ;

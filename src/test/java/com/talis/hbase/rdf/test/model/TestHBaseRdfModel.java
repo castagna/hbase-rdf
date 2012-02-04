@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,54 @@ public class TestHBaseRdfModel
 		{
 			Store svp = StoreCreator.getStoreVerticallyPartitioned() ;
 			return HBaseRdfFactory.connectDefaultModel( svp ) ;
+		}
+	}
+	
+	public static class TestHBaseRdfIndexedModel extends AbstractTestModelHBaseRdf
+	{
+		public TestHBaseRdfIndexedModel( String name ) { super( name ) ; }
+		
+		@Override
+		public Model getModel()
+		{
+			Store in = StoreCreator.getStoreIndexed() ;
+			return HBaseRdfFactory.connectDefaultModel( in ) ;
+		}
+	}
+
+	public static class TestHBaseRdfVPIndexedModel extends AbstractTestModelHBaseRdf
+	{
+		public TestHBaseRdfVPIndexedModel( String name ) { super( name ) ; }
+		
+		@Override
+		public Model getModel()
+		{
+			Store vpin = StoreCreator.getStoreVPIndexed() ;
+			return HBaseRdfFactory.connectDefaultModel( vpin ) ;
+		}
+	}
+
+	public static class TestHBaseRdfHybridModel extends AbstractTestModelHBaseRdf
+	{
+		public TestHBaseRdfHybridModel( String name ) { super( name ) ; }
+		
+		@Override
+		public Model getModel()
+		{
+			Store ss = StoreCreator.getStoreHybrid() ;
+			return HBaseRdfFactory.connectDefaultModel( ss ) ;
+		}
+	}
+
+	public static class TestHBaseRdfHashModel extends AbstractTestModelHBaseRdf
+	{
+		public TestHBaseRdfHashModel( String name ) { super( name ) ; }
+		
+		@Override
+		public Model getModel()
+		{
+			Store ss = StoreCreator.getStoreHash() ;
+			return HBaseRdfFactory.connectDefaultModel( ss ) ;
 		}
 	}
 }

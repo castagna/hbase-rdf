@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +54,9 @@ public class HBaseRdfAllRowsWithFilterIterator extends AbstractIterator<Node>
 	}
 	
 	@Override
+	public void close() { scanner.close() ; }
+
+	@Override
 	public boolean hasNext() 
 	{
 		try 
@@ -61,7 +64,7 @@ public class HBaseRdfAllRowsWithFilterIterator extends AbstractIterator<Node>
 			if( rowIterator == null || !rowIterator.hasNext() ) 
 			{
 				Result rr = scanner.next() ;
-				if( rr == null ) { rowIterator = null ; return false ; }				
+				if( rr == null ) { rowIterator = null ; close() ; return false ; }				
 				rowIterator = new HBaseRdfSingleRowIterator( rr, subject, predicate, object, columnFamily ) ;
 				rr = null ;
 			}
@@ -78,7 +81,7 @@ public class HBaseRdfAllRowsWithFilterIterator extends AbstractIterator<Node>
 			if( rowIterator == null || !rowIterator.hasNext() ) 
 			{
 				Result rr = scanner.next() ;
-				if( rr == null ) { rowIterator = null ; return null ; }			
+				if( rr == null ) { rowIterator = null ; close() ; return null ; }			
 				rowIterator = new HBaseRdfSingleRowIterator( rr, subject, predicate, object, columnFamily ) ;
 				rr = null ;
 			}

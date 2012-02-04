@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ import com.talis.hbase.rdf.store.TableDesc;
 public class TupleLoaderSimple extends TupleLoaderBase
 {
     protected TableDesc[] tables = null ;
-
+    private boolean areTablesCreated = false ;
+    
 	public TupleLoaderSimple( String storeName, HBaseRdfConnection connection, TableDescLayouts tableDesc, int chunkSize ) 
 	{
 		super( storeName, connection, tableDesc, chunkSize ) ;
@@ -41,17 +42,17 @@ public class TupleLoaderSimple extends TupleLoaderBase
 
 	public void createTables( Node... row ) throws Exception
 	{
+		if( areTablesCreated ) return ;
 		String prefix = getPrefix( row ) ;
 		for( int i = 0 ; i < tables.length ; i++ )
 		{
 			String tableName = name() + "-" + prefix + tables[i].getTableName() ;
-			if( !connection().getAdmin().tableExists( tableName ) )
+			if( tables().containsKey( tableName ) ) continue ;
+			else
 				tables().put( tableName, connection().createTable( tableName, tables[i].getColNames() ) ) ;
-			else if( !tables().containsKey( tableName ) )
-				tables().put( tableName, connection().openTable( tableName ) ) ;
 			tableName = null ;
 		}
-		prefix = null ; 
+		prefix = null ; areTablesCreated = true ;
 	}
 	
 	public void commit() throws Exception
@@ -71,7 +72,7 @@ public class TupleLoaderSimple extends TupleLoaderBase
 			TableDesc desc = null ; if( start == 0 ) desc = tables[i] ; else desc = tables[i-1] ;
 			HTable ht = tables().get( name() + "-" + prefix + desc.getTableName() ) ;
 			if( ht == null ) continue ;
-			byte[] bytes = Bytes.toBytes( row[i].toString() ) ; Put update = new Put( bytes ) ;
+			byte[] bytes = Bytes.toBytes( row[i].toString() ) ; Put update = new Put( bytes ) ; totalSize += bytes.length ;
 			byte[] colFamilyBytes = desc.getColNames().get( 0 ).getBytes(), colQualBytes = null ;
 			if( ( i == 1 && start == 0 ) || ( i == 2 && start == 1 ) )
 				colQualBytes = createTriple( (i-1)%(3+start), (i+1)%(3+start), row ).getBytes() ;
@@ -80,6 +81,7 @@ public class TupleLoaderSimple extends TupleLoaderBase
 					colQualBytes = createTriple( (i+1)%(3+start), (i+2)%(3+start), row ).getBytes() ;
 				else
 					colQualBytes = createTriple( (i+1+start)%(3+start), (i+2+start)%(3+start), row ).getBytes() ;
+			totalSize += colQualBytes.length ;
 			update.add( colFamilyBytes, colQualBytes, Bytes.toBytes( "" ) ) ;
 			ht.checkAndPut( bytes, colFamilyBytes, colQualBytes, null, update ) ;
 			update = null ; bytes = null ; colFamilyBytes = null ; colQualBytes = null ;

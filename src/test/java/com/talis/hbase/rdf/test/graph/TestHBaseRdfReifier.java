@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,10 @@ public class TestHBaseRdfReifier
 		
 		ts.addTestSuite( TestHBaseRdfSimpleReifier.class ) ;
 		ts.addTestSuite( TestHBaseRdfVertPartReifier.class ) ;
+		ts.addTestSuite( TestHBaseRdfIndexedReifier.class ) ;
+		ts.addTestSuite( TestHBaseRdfVPIndexedReifier.class ) ;
+		ts.addTestSuite( TestHBaseRdfHybridReifier.class ) ;
+		ts.addTestSuite( TestHBaseRdfHashReifier.class ) ;
 		
 		return ts ;
 	}
@@ -74,4 +78,81 @@ public class TestHBaseRdfReifier
 			return HBaseRdfFactory.connectDefaultGraph( store, style );		
 		}
 	}
+	
+	public static class TestHBaseRdfIndexedReifier extends AbstractTestReifierHBaseRdf
+	{
+		public TestHBaseRdfIndexedReifier( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+		
+		@Override 
+		public Graph getGraph( ReificationStyle style )
+		{
+			Store store = StoreCreator.getStoreIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, style );		
+		}
+	}
+
+	public static class TestHBaseRdfVPIndexedReifier extends AbstractTestReifierHBaseRdf
+	{
+		public TestHBaseRdfVPIndexedReifier( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreVPIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+		
+		@Override 
+		public Graph getGraph( ReificationStyle style )
+		{
+			Store store = StoreCreator.getStoreVPIndexed() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, style );		
+		}
+	}
+
+	public static class TestHBaseRdfHybridReifier extends AbstractTestReifierHBaseRdf
+	{
+		public TestHBaseRdfHybridReifier( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreHybrid() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+		
+		@Override 
+		public Graph getGraph( ReificationStyle style )
+		{
+			Store store = StoreCreator.getStoreHybrid() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, style );		
+		}
+	}
+
+	public static class TestHBaseRdfHashReifier extends AbstractTestReifierHBaseRdf
+	{
+		public TestHBaseRdfHashReifier( String name ) { super( name ) ; }
+		
+		@Override
+		public Graph getGraph()
+		{
+			Store store = StoreCreator.getStoreHash() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, ReificationStyle.Standard );
+		}
+		
+		@Override 
+		public Graph getGraph( ReificationStyle style )
+		{
+			Store store = StoreCreator.getStoreHash() ;
+			return HBaseRdfFactory.connectDefaultGraph( store, style );		
+		}
+	}
+
 }

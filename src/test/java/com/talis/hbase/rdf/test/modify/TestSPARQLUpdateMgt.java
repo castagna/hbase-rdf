@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,10 @@ public class TestSPARQLUpdateMgt
         
         ts.addTestSuite( TestSPARQLUpdateMgtSimple.class ) ;
         ts.addTestSuite( TestSPARQLUpdateMgtVertPart.class ) ;
+        ts.addTestSuite( TestSPARQLUpdateMgtIndexed.class ) ;
+        ts.addTestSuite( TestSPARQLUpdateMgtVPIndexed.class ) ;
+        ts.addTestSuite( TestSPARQLUpdateMgtHybrid.class ) ;
+        ts.addTestSuite( TestSPARQLUpdateMgtHash.class ) ;
         
         return ts ;
     }
@@ -57,5 +61,49 @@ public class TestSPARQLUpdateMgt
 	        GraphStore graphStore = HBaseRdfFactory.connectGraphStore( store, ReificationStyle.Standard ) ;
 	        return graphStore ;
 	    }    	
+    }
+    
+    public static class TestSPARQLUpdateMgtIndexed extends TestUpdateGraphMgt
+    {
+	    @Override
+	    protected GraphStore getEmptyGraphStore()
+	    {
+	        Store store = StoreCreator.getStoreIndexed() ;
+	        GraphStore graphStore = HBaseRdfFactory.connectGraphStore( store, ReificationStyle.Standard ) ;
+	        return graphStore ;
+	    }
+    }
+
+    public static class TestSPARQLUpdateMgtVPIndexed extends TestUpdateGraphMgt
+    {
+	    @Override
+	    protected GraphStore getEmptyGraphStore()
+	    {
+	        Store store = StoreCreator.getStoreVPIndexed() ;
+	        GraphStore graphStore = HBaseRdfFactory.connectGraphStore( store, ReificationStyle.Standard ) ;
+	        return graphStore ;
+	    }
+    }
+
+    public static class TestSPARQLUpdateMgtHybrid extends TestUpdateGraphMgt
+    {
+	    @Override
+	    protected GraphStore getEmptyGraphStore()
+	    {
+	        Store store = StoreCreator.getStoreHybrid() ;
+	        GraphStore graphStore = HBaseRdfFactory.connectGraphStore( store, ReificationStyle.Standard ) ;
+	        return graphStore ;
+	    }
+    }
+
+    public static class TestSPARQLUpdateMgtHash extends TestUpdateGraphMgt
+    {
+	    @Override
+	    protected GraphStore getEmptyGraphStore()
+	    {
+	        Store store = StoreCreator.getStoreHash() ;
+	        GraphStore graphStore = HBaseRdfFactory.connectGraphStore( store, ReificationStyle.Standard ) ;
+	        return graphStore ;
+	    }
     }
 }

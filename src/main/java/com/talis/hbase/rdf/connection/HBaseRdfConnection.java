@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,21 +28,23 @@ import org.slf4j.LoggerFactory;
 
 public class HBaseRdfConnection 
 {
-    static private Logger log = LoggerFactory.getLogger( HBaseRdfConnection.class ) ;
+    static private Logger LOG = LoggerFactory.getLogger( HBaseRdfConnection.class ) ;
 
     private Configuration config = null ;
     
 	private HBaseAdmin admin = null ;
 	
+	private static final long CLIENT_CACHE_SIZE = 20971520 ;
+	
 	public HBaseRdfConnection( String configFile )
 	{
-		this.config = HBaseRdfConnectionFactory.createHBaseConfiguration( configFile ) ;
+		this.config = HBaseRdfConnectionFactory.createHBaseConfiguration( configFile ) ; this.config.setQuietMode( true ) ;
 		this.admin = HBaseRdfConnectionFactory.createHBaseAdmin( config ) ;
 	}
 	
 	public HBaseRdfConnection( Configuration config )
 	{
-		this.config = config ;
+		this.config = config ; this.config.setQuietMode( true ) ;
 		this.admin = HBaseRdfConnectionFactory.createHBaseAdmin( config ) ;
 	}
 		
@@ -54,13 +56,27 @@ public class HBaseRdfConnection
 	
 	public HBaseAdmin getAdmin() { return admin ; }
 	
+	public boolean doesTableExist( String tableName ) 
+	{
+		boolean tableExists = false ;
+		try
+		{
+			tableExists = admin.tableExists( tableName ) ;
+		}
+		catch( Exception e ) { exception( "tableExists", e, tableName ) ; }
+		return tableExists ;
+	}
+	
 	public HTable openTable( String tableName )
 	{
 		HTable table = null ;
 		try
 		{
+			
 			admin.enableTable( tableName ) ;
 			table = new HTable( config, tableName ) ;
+			table.setAutoFlush( false ) ;
+			table.setWriteBufferSize( CLIENT_CACHE_SIZE ) ;
 		}
 		catch( Exception e ) { exception( "openTable", e, tableName ) ; }
 		return table ;
@@ -87,6 +103,8 @@ public class HBaseRdfConnection
 			admin.createTable( tableDesc ) ;
 			admin.enableTable( tableDesc.getNameAsString() ) ;
 			table = new HTable( config, tableDesc.getNameAsString() ) ;
+			table.setAutoFlush( false ) ;
+			table.setWriteBufferSize( CLIENT_CACHE_SIZE ) ;
 		}
 		catch( Exception e ) { exception( "createTable", e, tableDesc.getNameAsString() ) ; }
 		return table ;
@@ -108,6 +126,8 @@ public class HBaseRdfConnection
 			}
 			admin.enableTable( tableName ) ;
 			table = new HTable( config, tableName ) ;
+			table.setAutoFlush( false ) ;
+			table.setWriteBufferSize( CLIENT_CACHE_SIZE ) ;
 		}
 		catch( Exception e ) { exception( "createTable", e, tableName ); }
 		return table ;
@@ -115,6 +135,6 @@ public class HBaseRdfConnection
 	
 	private void exception( String who, Exception e, String tableName )
 	{
-		log.info( who + ": Exception \n " + e.getMessage() + " \n " + tableName ) ;
+		LOG.info( who + ": Exception \n " + e.getMessage() + " \n " + tableName ) ;
 	}
 }

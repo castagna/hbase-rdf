@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ public class FmtLayoutSimple extends FmtLayout
 			while( iterTblNames.hasNext() )
 			{
 				String tblName = iterTblNames.next() ;
-				connection().deleteTable( tblName ) ;
+				connection().deleteTable( tblName ) ; 
 				tblName = null ;
 			}
 			tables().clear() ;

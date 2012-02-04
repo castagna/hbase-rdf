@@ -1,5 +1,5 @@
 /*
- * Copyright © 2010 Talis Systems Ltd.
+ * Copyright © 2010, 2011, 2012 Talis Systems Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,12 @@ public class TestConnectionPooled extends ParamAllStores
     {
     	return Arrays.asList( new Object[][]
     	{
-    		{ "simple", 	StoreFactory.create( StoreDesc.read( "testing/StoreDesc/simple.ttl" ) ) },
-    		{ "vert-part", 	StoreFactory.create( StoreDesc.read( "testing/StoreDesc/vertical-partitioning.ttl" ) ) }
+    		{ "simple", 		StoreFactory.create( StoreDesc.read( "testing/StoreDesc/simple.ttl" ) ) },
+    		{ "vert-part", 		StoreFactory.create( StoreDesc.read( "testing/StoreDesc/vertical-partitioning.ttl" ) ) },
+    		{ "indexed", 		StoreFactory.create( StoreDesc.read( "testing/StoreDesc/indexed.ttl" ) ) },
+    		{ "vp-indexed", 	StoreFactory.create( StoreDesc.read( "testing/StoreDesc/vp-indexed.ttl" ) ) },
+    		{ "hybrid", 		StoreFactory.create( StoreDesc.read( "testing/StoreDesc/hybrid.ttl" ) ) },
+    		{ "hash", 			StoreFactory.create( StoreDesc.read( "testing/StoreDesc/hash.ttl" ) ) },
     	} ) ;
     }
     
