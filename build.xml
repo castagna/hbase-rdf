@@ -1,0 +1,132 @@
+<project name="hbase-rdf" default="all" basedir=".">
+
+  <!-- Property file for build.xml -->
+  <property file="build.properties"/>
+
+  <!-- all tests -->
+  <target name="all" depends="init, compile-src-classes, create-src-pkg, compile-test-classes, create-test-pkg, compile-example-classes, create-example-pkg"
+ 	  description="Compile sources and tests" />
+
+  <!-- clean classes -->
+  <target name="clean" description="remove all contents to ensure a clean build">
+	<delete dir="${hbaserdf.build.dir}" />
+	<delete dir="${hbaserdf.build.test}" />
+	<delete dir="${hbaserdf.build.examples}" />
+  </target>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+	<mkdir dir="${hbaserdf.build.dir}" />
+	<mkdir dir="${hbaserdf.build.test}" />
+	<mkdir dir="${hbaserdf.build.examples}" />
+    <tstamp/>
+  </target>
+
+  <!-- compile tests -->
+  <target name="compile-test-classes" depends="init, compile-src-classes, create-src-pkg"
+	description="Compile the test source files under ${hbaserdf.src.test}">
+	<javac 
+		srcdir="${hbaserdf.src.test}"
+		destdir="${hbaserdf.build.test}" >
+		<classpath refid="classpath" />
+	</javac>
+  </target>
+
+  <!-- compile examples; includes samples, Sp2Bench and LUBM -->
+  <target name="compile-example-classes" depends="init, compile-src-classes, create-src-pkg"
+	description="Compile the example files under ${hbaserdf.src.examples}">
+	<javac 
+		srcdir="${hbaserdf.src.examples}"
+		destdir="${hbaserdf.build.examples}" >
+		<classpath refid="classpath" />
+	</javac>
+  </target>
+
+  <!-- compile src files -->
+  <target name="compile-src-classes" 
+          depends="init"
+	  description="Compile the source tree into class files under ${hbaserdf.build.dir}">
+  	<javac
+		srcdir="${hbaserdf.src.dir}"
+		destdir="${hbaserdf.build.dir}"
+		debug="true"
+	>
+	<classpath refid="classpath"/>
+  	</javac>
+  </target>
+
+  <!-- create the source package -->
+  <target name="create-src-pkg" 
+          depends="init, compile-src-classes"
+	  description="Create the source package based on the source files">
+  	<jar
+		destfile="${lib.dir}/jena-hbaserdf.jar"
+		basedir="${hbaserdf.build.dir}">
+  	</jar>
+ </target>
+
+  <!-- create the test package -->
+  <target name="create-test-pkg" 
+          depends="init, compile-test-classes"
+	  description="Create the test package based on the test files">
+  	<jar
+		destfile="${lib.dir}/jena-hbaserdf-test.jar"
+		basedir="${hbaserdf.build.test}">
+  	</jar>
+ </target>
+
+  <!-- create the example package -->
+  <target name="create-example-pkg" 
+          depends="init, compile-example-classes"
+	  description="Create the example package based on the example files">
+  	<jar
+		destfile="${lib.dir}/jena-hbaserdf-example.jar"
+		basedir="${hbaserdf.build.examples}">
+  	</jar>
+ </target>
+
+  <!-- Classpaths -->
+  <path id="classpath">
+    	<fileset dir="${lib.dir}" includes="*.jar" />
+  </path>
+
+  <target name="load-sp2b" depends="create-src-pkg, create-example-pkg, clean">
+    	<java classname="${load.sp2b}" maxmemory="1g" fork="yes">
+      		<classpath refid="classpath" />
+		<jvmarg value="-XX:-UseGCOverheadLimit" />
+		<jvmarg value="-Xms1g" />
+		<jvmarg value="-XX:+UseConcMarkSweepGC" />
+		<arg line="${test.numOfRuns} ${store.info} --format=${store.format} ${graph.name.sp2b} ${sp2b.input}"/>
+    	</java>
+  </target>
+
+  <target name="run-sp2b" depends="create-src-pkg, create-example-pkg, clean">
+    	<java classname="${run.sp2b}" maxmemory="1g" fork="yes">
+      		<classpath refid="classpath" />
+		<jvmarg value="-XX:-UseGCOverheadLimit" />
+		<jvmarg value="-Xms1g" />
+		<jvmarg value="-XX:+UseConcMarkSweepGC" />
+		<arg line="${store.info} ${graph.name.sp2b} ${test.numOfRuns}"/>
+    	</java>
+  </target>
+
+  <target name="load-lubm" depends="create-src-pkg, create-example-pkg, clean">
+    	<java classname="${load.lubm}" maxmemory="1g" fork="yes">
+      		<classpath refid="classpath" />
+		<jvmarg value="-XX:-UseGCOverheadLimit" />
+		<jvmarg value="-Xms1g" />
+		<jvmarg value="-XX:+UseConcMarkSweepGC" />
+		<arg line="${test.numOfRuns} ${store.info} --format=${store.format} ${graph.name.lubm} ${lubm.input}"/>
+    	</java>
+  </target>
+
+  <target name="run-lubm" depends="create-src-pkg, create-example-pkg, clean">
+        <java classname="${run.lubm}" maxmemory="1g" fork="yes">
+                <classpath refid="classpath" />
+                <jvmarg value="-XX:-UseGCOverheadLimit" />
+                <jvmarg value="-Xms1g" />
+                <jvmarg value="-XX:+UseConcMarkSweepGC" />
+                <arg line="${store.info} ${graph.name.lubm} ${test.numOfRuns}"/>
+        </java>
+  </target>
+</project>
