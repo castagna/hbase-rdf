@@ -110,23 +110,15 @@
     	</java>
   </target>
 
-  <target name="load-lubm" depends="create-src-pkg, create-example-pkg, clean">
-    	<java classname="${load.lubm}" maxmemory="1g" fork="yes">
-      		<classpath refid="classpath" />
-		<jvmarg value="-XX:-UseGCOverheadLimit" />
-		<jvmarg value="-Xms1g" />
-		<jvmarg value="-XX:+UseConcMarkSweepGC" />
-		<arg line="${test.numOfRuns} ${store.info} --format=${store.format} ${graph.name.lubm} ${lubm.input}"/>
-    	</java>
-  </target>
-
   <target name="run-lubm" depends="create-src-pkg, create-example-pkg, clean">
-        <java classname="${run.lubm}" maxmemory="1g" fork="yes">
+        <java classname="${run.lubm}" maxmemory="2g" fork="yes">
                 <classpath refid="classpath" />
                 <jvmarg value="-XX:-UseGCOverheadLimit" />
                 <jvmarg value="-Xms1g" />
                 <jvmarg value="-XX:+UseConcMarkSweepGC" />
-                <arg line="${store.info} ${graph.name.lubm} ${test.numOfRuns}"/>
+		<jvmarg value="-XX:PermSize=256m" />
+		<jvmarg value="-XX:MaxPermSize=512m" />
+                <arg line="${test.numOfRuns} ${store.info} --format=${store.format} ${graph.name.lubm} ${lubm.input} ${test.skippedqueries}"/>
         </java>
   </target>
 </project>
