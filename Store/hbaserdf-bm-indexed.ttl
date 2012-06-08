@@ -1,0 +1,15 @@
+@prefix hbaserdf:     <http://rdf.hbase.talis.com/2011/hbase-rdf#> .
+@prefix rdfs:	 	  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:     	  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ja:      	  <http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+# HBaseRdf - Simple Layout for benchmarks
+
+<#store> rdf:type hbaserdf:Store ;
+    hbaserdf:layout     	"layout3" ;
+    hbaserdf:connection 	<#conn> ;
+    .
+
+<#conn> rdf:type hbaserdf:HBaseConnection ;
+    hbaserdf:configuration	"/Cloud/Hbase/hbase-0.90.1/conf/hbase-site.xml" ;
+    .
