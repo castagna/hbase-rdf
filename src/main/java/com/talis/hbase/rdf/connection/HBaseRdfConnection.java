@@ -72,7 +72,7 @@ public class HBaseRdfConnection
 		HTable table = null ;
 		try
 		{
-			
+			admin.disableTable( tableName ) ;
 			admin.enableTable( tableName ) ;
 			table = new HTable( config, tableName ) ;
 			table.setAutoFlush( false ) ;
